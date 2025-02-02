@@ -1,16 +1,16 @@
 import * as vscode from 'vscode';
 
-
 export function activate(context: vscode.ExtensionContext) {
 
-	const state = context.globalState;
-	console.log(state.keys(), typeof state)
+    const disposableCtrl1 = vscode.commands.registerCommand('extension.createControlGroup', () => {
+        console.log('Control Group Created');
+    });
 
-	// const disposable = vscode.commands.registerCommand('d.helloWorld', () => {
-	// 	vscode.window.showInformationMessage(`res: ${JSON.stringify(a, null, 2)}, type ${typeof a}`);
-	// });
+    const disposableJump = vscode.commands.registerCommand('extension.jumpToControlGroup', () => {
+        console.log('Jumped to Control Group');
+    });
 
-	// context.subscriptions.push(disposable);
+    context.subscriptions.push(...[disposableCtrl1, disposableJump]);
 }
 
 export function deactivate() {}

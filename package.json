@@ -17,12 +17,13 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "d.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+      "keybindings": [
+          {
+              "command": "extension.createControlGroup",
+              "key": "ctrl+1",
+              "when": "editorTextFocus"
+          }
+      ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
