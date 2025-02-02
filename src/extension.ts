@@ -3,26 +3,35 @@ import { StateManager } from './state';
 
 export function activate(context: vscode.ExtensionContext) {
 
-    const storage = context.workspaceState;
+    // const storage = context.workspaceState;
     const sm = new StateManager();
 
-    const disposableCtrl1 = vscode.commands.registerCommand('extension.createControlGroup', async () => {
-        console.log('Control Group Created');
-        sm.createGroup(1)
-        console.log(sm.state)
+    // setInterval(() => {
+    //     console.log('==========')
+    //     console.log(sm.state)
+    //     console.log(sm.groups)
+    //     console.log('==========')
+    // }, 500)
+
+    const createControlGroup = vscode.commands.registerCommand('extension.createControlGroup', async (args) => {
+        const { id } = args
+        console.log(`Crekte conlrol group: ${id}`)
+        sm.createGroup(id)
     });
 
-    const disposableJump = vscode.commands.registerCommand('extension.jumpToControlGroup', () => {
-        if (sm.state.active === 1 && sm.state.selected === 1)  {
-            console.log("JUMP 1")
+    const focusControlGroup = vscode.commands.registerCommand('extension.setActiveControlGroup', (args) => {
+        console.log('>>>>>>>>> FOCUS CONTROLK GROUP')
+        const { id } = args
+        if (sm.state.activeGroupId === 1) {
+            console.log(`JUMP ${id}`)
         }
         else {
             sm.focusGroup(1)
-            console.log("SET FOCUSED 1")
+            console.log(`SET ACTIVE ${id}`)
         }
     });
 
-    context.subscriptions.push(...[disposableCtrl1, disposableJump]);
+    context.subscriptions.push(...[createControlGroup, focusControlGroup]);
 }
 
 export function deactivate() {}

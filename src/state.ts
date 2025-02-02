@@ -1,33 +1,23 @@
-import * as vscode from 'vscode';
 import { Map, ControlGroupData, ExtensionState } from './types';
+import { isEmpty } from './util';
 
 export class StateManager {
 
-  private FOCUS_TIMEOUT_MS = 300
   public groups: Map<ControlGroupData>;
   public state: ExtensionState;
   
   constructor() {
     this.groups = {};
     this.state = {
-      active: -1,
-      selected: -1,
+      activeGroupId: -1,
     }
   }
-
-  private revokeActiveStatus(id: number) {
-    if (this.state.active === id) {
-      this.state.active = -1
-    }
-  }
-
   public focusGroup(id: number) {
+    if (isEmpty(this.groups[id].marks)) return
     this.state = {
       ...this.state,
-      active: id,
-      selected: id,
+      activeGroupId: id,
     }
-    setTimeout(() => this.revokeActiveStatus(id), this.FOCUS_TIMEOUT_MS)
   }
 
   public createGroup(id: number) {

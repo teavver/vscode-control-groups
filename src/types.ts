@@ -4,8 +4,7 @@ export interface Map<T> {
 }
 
 export interface ExtensionState {
-  selected: number // single press = select
-  active: number // active = wait threshold for jump
+  activeGroupId: number
 }
 
 export interface ControlGroupData {

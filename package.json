@@ -18,10 +18,35 @@
   "main": "./out/extension.js",
   "contributes": {
       "keybindings": [
-          {
+        {
               "command": "extension.createControlGroup",
               "key": "ctrl+1",
-              "when": "editorTextFocus"
+              "when": "editorTextFocus",
+              "args": { "id": 1 }
+          },
+          {
+              "command": "extension.createControlGroup",
+              "key": "ctrl+2",
+              "when": "editorTextFocus",
+              "args": { "id": 2 }
+          },
+          {
+              "command": "extension.createControlGroup",
+              "key": "ctrl+3",
+              "when": "editorTextFocus",
+              "args": { "id": 3 }
+          },
+          {
+              "command": "extension.createControlGroup",
+              "key": "ctrl+4",
+              "when": "editorTextFocus",
+              "args": { "id": 4 }
+          },
+          {
+              "command": "extension.createControlGroup",
+              "key": "ctrl+5",
+              "when": "editorTextFocus",
+              "args": { "id": 5 }
           }
       ]
   },
