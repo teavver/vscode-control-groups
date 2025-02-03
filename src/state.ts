@@ -1,10 +1,11 @@
-import { Map, ControlGroupData, ExtensionState } from './types';
+import { Mark } from './mark';
+import { Map, ControlGroupData, ExtensionState, MarkData } from './types';
 import { isEmpty } from './util';
 
 export class StateManager {
 
-  public groups: Map<ControlGroupData>;
-  public state: ExtensionState;
+  groups: Map<ControlGroupData>;
+  state: ExtensionState;
   
   constructor() {
     this.groups = {};
@@ -12,17 +13,19 @@ export class StateManager {
       activeGroupId: -1,
     }
   }
-  public focusGroup(id: number) {
+
+  jumpToGroup(id: number) {
     if (isEmpty(this.groups[id].marks)) return
-    this.state = {
-      ...this.state,
-      activeGroupId: id,
-    }
+    this.state.activeGroupId = id
+    const first = this.groups[id].marks[0]
+    first.jump()
   }
 
-  public createGroup(id: number) {
+  createGroup(id: number, data: MarkData) {
+    this.state.activeGroupId = id
+    const mark = new Mark(data)
     this.groups[id.toString()] = {
-      marks: [`CONTROL GROUP ${id}`]
+      marks: [mark]
     }
   }
 
