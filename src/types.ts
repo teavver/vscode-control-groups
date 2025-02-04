@@ -16,4 +16,5 @@ export interface ExtensionState {
 
 export interface ControlGroupData {
   marks: Mark[];
+  lastMarkId: number;
 }

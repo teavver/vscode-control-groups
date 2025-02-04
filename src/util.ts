@@ -5,7 +5,9 @@ export const isEmpty = <T>(arr: Array<T>) => (!Array.isArray(arr) || !arr.length
 
 export const isError = <T>(val: T | Error): val is Error => val instanceof Error
 
-export const getMarkData = (): Error | MarkData => {
+export const isNullish = (val: any): val is undefined | null => (val === undefined || val === null)
+
+export const createMarkFromPos = (): Error | MarkData => {
   try {
     const editor = vscode.window.activeTextEditor;
     if (!editor) return new Error(`cannot getPosition - no editor open`)
