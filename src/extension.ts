@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { StateManager } from './state';
 import { MarkData } from './types';
+import { isError, getMarkData } from './util';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -17,36 +18,25 @@ export function activate(context: vscode.ExtensionContext) {
     //     console.log('==========')
     // }, 2000)
 
-    const createControlGroup = vscode.commands.registerCommand('extension.createControlGroup', async (args) => {
-
+    const createControlGroup = vscode.commands.registerCommand('sc2.createControlGroup', async (args) => {
         const { id } = args
         console.log(`Start > Crekte conlrol group: ${id}`)
-
-        const editor = vscode.window.activeTextEditor;
-        if (editor) {
-            const document = editor.document;
-            const selection = editor.selection;
-            const position = selection.active;
-
-            const mark: MarkData = {
-                uri: document.uri.toString(),
-                line: position.line,
-                char: position.character,
-            };
-            console.log('End > create ctrl group ', JSON.stringify(mark, null, 2))
-            sm.createGroup(id, mark)
-        } else {
-            console.error('No active text editor found.');
-        }
+        const mark = getMarkData()
+        if (isError<MarkData>(mark)) throw new Error(mark.message)
+        sm.createGroup(id, mark)
     });
 
-    const focusControlGroup = vscode.commands.registerCommand('extension.setActiveControlGroup', (args) => {
+    const newControlGroup = vscode.commands.registerCommand('sc2.newControlGroup', async (args) => {
+
+    })
+
+    const focusControlGroup = vscode.commands.registerCommand('sc2.setActiveControlGroup', (args) => {
         const { id } = args
         console.log(`> JUMP ${id}`)
         sm.jumpToGroup(id)
     });
 
-    context.subscriptions.push(...[createControlGroup, focusControlGroup]);
+    context.subscriptions.push(...[createControlGroup, newControlGroup, focusControlGroup]);
 }
 
 export function deactivate() {}

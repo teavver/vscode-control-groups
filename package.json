@@ -1,14 +1,14 @@
 {
-  "name": "d",
-  "displayName": "d",
-  "description": "",
+  "name": "vscode-control-groups",
+  "displayName": "vscode-control-groups",
+  "description": "sc2 control groups for vscodevim extension",
+  "author": {
+    "name": "teavver"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.96.0"
   },
-  "categories": [
-    "Other"
-  ],
   "activationEvents": [
     "onStartupFinished"
   ],
@@ -19,31 +19,31 @@
   "contributes": {
       "keybindings": [
         {
-              "command": "extension.createControlGroup",
+              "command": "sc2.createControlGroup",
               "key": "ctrl+1",
               "when": "editorTextFocus",
               "args": { "id": 1 }
           },
           {
-              "command": "extension.createControlGroup",
+              "command": "sc2.createControlGroup",
               "key": "ctrl+2",
               "when": "editorTextFocus",
               "args": { "id": 2 }
           },
           {
-              "command": "extension.createControlGroup",
+              "command": "sc2.createControlGroup",
               "key": "ctrl+3",
               "when": "editorTextFocus",
               "args": { "id": 3 }
           },
           {
-              "command": "extension.createControlGroup",
+              "command": "sc2.createControlGroup",
               "key": "ctrl+4",
               "when": "editorTextFocus",
               "args": { "id": 4 }
           },
           {
-              "command": "extension.createControlGroup",
+              "command": "sc2.createControlGroup",
               "key": "ctrl+5",
               "when": "editorTextFocus",
               "args": { "id": 5 }
