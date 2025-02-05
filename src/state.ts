@@ -44,24 +44,25 @@ export class StateManager {
     }
   }
 
-  cycleGroup(id: number) {
-    // WIP
-    const target = this.groups[id.toString()]
-    const isTargetActive = this.state.activeGroupId === id
+  cycle(backwards: boolean = false) {
+    // TODO : handle backwards (shift + tab)
+    const activeGroupId = this.state.activeGroupId
+    const target = this.groups[activeGroupId]
+    if (isNullish(target) || isEmpty(target.marks)) {
+      console.log('[CYCLE] ---- cannot cycle --- ')
+      return
+    }
     const isSingleMarkGroup = target.marks.length <= 1
-    if (
-      isNullish(target)
-      || isEmpty(target.marks)
-      || !isTargetActive
-      || isSingleMarkGroup
-    ) return
+    if (isSingleMarkGroup) return
     const nextId = target.lastMarkId + 1
     const nextMark = target.marks[nextId]
     if (!nextMark) {
       console.log('[CYCLE] no next mark - jump to start')
-      this.jumpToGroup(id, this.FIRST_MARK_ID)
+      target.lastMarkId = this.FIRST_MARK_ID
+      return this.jumpToGroup(activeGroupId, this.FIRST_MARK_ID)
     }
     console.log('[CYCLE] nextid: ', nextId)
-    this.jumpToGroup(id, nextId)
+    target.lastMarkId = nextId
+    this.jumpToGroup(activeGroupId, nextId)
   }
 }

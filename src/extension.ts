@@ -36,12 +36,13 @@ export function activate(context: vscode.ExtensionContext) {
         sm.jumpToGroup(id)
     });
 
-    const cycleControlGroup = vscode.commands.registerCommand('sc2.cycleControlGroup', (args) => {
-        const { id, direction } = args
-        // console.log(`[]: id: ${id}`)
+    const cycleControlGroup = vscode.commands.registerCommand('sc2.cycle', (args) => {
+        const { backwards } = args
+        console.log(`[cycleControlGroup]: backwards ${backwards}`)
+        sm.cycle()
     });
 
-    context.subscriptions.push(...[addToControlGroup, jumpToControlGroup]);
+    context.subscriptions.push(...[addToControlGroup, jumpToControlGroup, cycleControlGroup]);
 }
 
 export function deactivate() {}

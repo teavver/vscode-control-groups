@@ -78,6 +78,12 @@
             "key": "shift+5",
             "when": "inputFocus && vim.mode == 'Normal'",
             "args": { "id": 5, "createGroup": true }
+          },
+          {
+            "command": "sc2.cycle",
+            "key": "Tab",
+            "when": "inputFocus && vim.mode == 'Normal'",
+            "args": { "backwards": false }
           }
       ]
   },
