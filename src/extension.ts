@@ -1,14 +1,18 @@
 import * as vscode from 'vscode';
 import { StateManager } from './state';
+import { StatusText } from "./status";
 import { MarkData } from './types';
 import { isError, createMarkFromPos, isNullish } from './util';
+
+let st: StatusText | null = null
 
 export function activate(context: vscode.ExtensionContext) {
 
     const vim = vscode.extensions.getExtension('vscodevim.vim')
     if (!vim) throw new Error('VSCODE vimExt EERROR')
 
-    const sm = new StateManager();
+    const sm = new StateManager()
+    st = new StatusText()
 
     // setInterval(() => {
     //     console.log('==========')
@@ -45,4 +49,6 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(...[addToControlGroup, jumpToControlGroup, cycleControlGroup]);
 }
 
-export function deactivate() {}
+export function deactivate() {
+    if (st) st.status.dispose()
+}

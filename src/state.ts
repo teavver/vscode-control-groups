@@ -1,18 +1,25 @@
 import { Mark } from './mark';
+import { statusEmitter } from './events';
 import { Map, ControlGroupData, ExtensionState, MarkData } from './types';
 import { isEmpty, isNullish,  } from './util';
 
 export class StateManager {
 
   private FIRST_MARK_ID = 0
-  groups: Map<ControlGroupData>
-  state: ExtensionState
+  public groups: Map<ControlGroupData>
+  public state: ExtensionState
   
   constructor() {
     this.groups = {}
     this.state = {
       activeGroupId: -1,
     }
+  }
+
+  formatState(): string {
+    const nonEmptyGroups = Object.keys(this.groups)
+    const activeGroup = this.state.activeGroupId.toString()
+    return `-${nonEmptyGroups.map((group) => group === activeGroup ? `[ ${group} ]` : ` ${group} `)}-`
   }
 
   jumpToGroup(id: number, markId?: number) {
@@ -24,6 +31,7 @@ export class StateManager {
     const mark = this.groups[id].marks[idx]
     this.groups[id].lastMarkId = idx
     mark.jump()
+    statusEmitter.fire(this.formatState())
   }
 
   addToGroup(id: number, data: MarkData, createGroup: boolean = false) {
@@ -32,16 +40,18 @@ export class StateManager {
     const target = this.groups[id.toString()]
     // Create mode
     if (createGroup || !target) {
-      return this.groups[id.toString()] = {
+      this.groups[id.toString()] = {
         lastMarkId: this.FIRST_MARK_ID,
         marks: [mark]
       }
+      return statusEmitter.fire(this.formatState())
     }
     // Add mode
-    return this.groups[id.toString()] = {
+    this.groups[id.toString()] = {
       lastMarkId: target.marks.length,
       marks: [...target.marks, mark]
     }
+    return statusEmitter.fire(this.formatState())
   }
 
   cycle(backwards: boolean = false) {
