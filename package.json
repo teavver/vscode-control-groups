@@ -22,62 +22,62 @@
               "command": "sc2.addToControlGroup",
               "key": "ctrl+1",
               "when": "editorTextFocus",
-              "args": { "id": 1, "newGroup": false }
+              "args": { "id": 1, "createGroup": false }
           },
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+2",
               "when": "inputFocus && vim.mode == 'Normal'",
-              "args": { "id": 2, "newGroup": false }
+              "args": { "id": 2, "createGroup": false }
           },
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+3",
               "when": "editorTextFocus",
-              "args": { "id": 3, "newGroup": false }
+              "args": { "id": 3, "createGroup": false }
           },
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+4",
               "when": "editorTextFocus",
-              "args": { "id": 4, "newGroup": false }
+              "args": { "id": 4, "createGroup": false }
           },
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+5",
               "when": "editorTextFocus",
-              "args": { "id": 5, "newGroup": false }
+              "args": { "id": 5, "createGroup": false }
           },
 
           {
             "command": "sc2.addToControlGroup",
             "key": "shift+1",
             "when": "inputFocus && vim.mode == 'Normal'",
-            "args": { "id": 1, "newGroup": true }
+            "args": { "id": 1, "createGroup": true }
           },
           {
             "command": "sc2.addToControlGroup",
             "key": "shift+2",
             "when": "inputFocus && vim.mode == 'Normal'",
-            "args": { "id": 2, "newGroup": true }
+            "args": { "id": 2, "createGroup": true }
           },
           {
             "command": "sc2.addToControlGroup",
             "key": "shift+3",
             "when": "inputFocus && vim.mode == 'Normal'",
-            "args": { "id": 3, "newGroup": true }
+            "args": { "id": 3, "createGroup": true }
           },
           {
             "command": "sc2.addToControlGroup",
             "key": "shift+4",
             "when": "inputFocus && vim.mode == 'Normal'",
-            "args": { "id": 4, "newGroup": true }
+            "args": { "id": 4, "createGroup": true }
           },
           {
             "command": "sc2.addToControlGroup",
             "key": "shift+5",
             "when": "inputFocus && vim.mode == 'Normal'",
-            "args": { "id": 5, "newGroup": true }
+            "args": { "id": 5, "createGroup": true }
           }
       ]
   },

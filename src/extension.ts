@@ -17,12 +17,12 @@ export function activate(context: vscode.ExtensionContext) {
     // }, 2000)
 
     const addToControlGroup = vscode.commands.registerCommand('sc2.addToControlGroup', async (args) => {
-        const { id, newGroup } = args
-        console.log(`[addToControlGroup]: id: ${id} , newGroup: ${newGroup}`)
+        const { id, createGroup } = args
+        console.log(`[addToControlGroup]: id: ${id} , createGroup: ${createGroup}`)
         const mark = createMarkFromPos()
-        if (isNullish(id) || isNullish(newGroup)) throw new Error(`[addToControlGroup] Missing 'id' or 'newGroup' argument`)
+        if (isNullish(id) || isNullish(createGroup)) throw new Error(`[addToControlGroup] Missing 'id' or 'createGroup' argument`)
         if (isError<MarkData>(mark)) throw new Error(mark.message)
-        if (newGroup) {
+        if (createGroup) {
             sm.addToGroup(id, mark, true)
             return console.log(sm.groups[id])
         }
