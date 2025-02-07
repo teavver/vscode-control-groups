@@ -1,10 +1,8 @@
 import * as vscode from "vscode";
 import { StateManager } from "./state";
-import { StatusText } from "./status";
 import { MarkData } from "./types";
+import { StatusText } from "./status";
 import { isError, createMarkFromPos, isNullish, logMod, createDebugLogger } from "./util";
-
-let st: StatusText | null = null
 
 export function activate(context: vscode.ExtensionContext) {
   const vim = vscode.extensions.getExtension("vscodevim.vim")
@@ -12,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   const dlog = createDebugLogger(context)
   const sm = new StateManager(dlog)
-  st = new StatusText()
+  new StatusText()
 
   const addToControlGroup = vscode.commands.registerCommand(
     "sc2.addToControlGroup",
@@ -52,6 +50,4 @@ export function activate(context: vscode.ExtensionContext) {
   )
 }
 
-export function deactivate() {
-  if (st) st.status.dispose()
-}
+export function deactivate() {}
