@@ -84,6 +84,12 @@
             "key": "Tab",
             "when": "inputFocus && vim.mode == 'Normal'",
             "args": { "backwards": false }
+          },
+          {
+            "command": "sc2.cycle",
+            "key": "shift+Tab",
+            "when": "inputFocus && vim.mode == 'Normal'",
+            "args": { "backwards": true }
           }
       ]
   },

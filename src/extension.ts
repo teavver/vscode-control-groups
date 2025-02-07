@@ -1,54 +1,57 @@
-import * as vscode from 'vscode';
-import { StateManager } from './state';
+import * as vscode from "vscode";
+import { StateManager } from "./state";
 import { StatusText } from "./status";
-import { MarkData } from './types';
-import { isError, createMarkFromPos, isNullish } from './util';
+import { MarkData } from "./types";
+import { isDevMode, isError, createMarkFromPos, isNullish, logMod } from "./util";
 
 let st: StatusText | null = null
 
 export function activate(context: vscode.ExtensionContext) {
+  const vim = vscode.extensions.getExtension("vscodevim.vim")
+  if (!vim) throw new Error("VSCODE vimExt EERROR")
 
-    const vim = vscode.extensions.getExtension('vscodevim.vim')
-    if (!vim) throw new Error('VSCODE vimExt EERROR')
+  const DEBUG = isDevMode(context.extensionMode)
+  const sm = new StateManager(DEBUG)
+  st = new StatusText()
 
-    const sm = new StateManager()
-    st = new StatusText()
+  const addToControlGroup = vscode.commands.registerCommand(
+    "sc2.addToControlGroup",
+    async (args) => {
+      const { id, createGroup } = args
+      const mark = createMarkFromPos()
+      if (isNullish(id) || isNullish(createGroup))
+        throw new Error(`${logMod('addToControlGroup')} Missing 'id' or 'createGroup' arg`)
+      if (isError<MarkData>(mark)) throw new Error(`${logMod('addToControlGroup')} ${mark.message}`)
+      if (createGroup) {
+        return sm.addToGroup(id, mark, true)
+      }
+      sm.addToGroup(id, mark)
+    }
+  )
 
-    // setInterval(() => {
-    //     console.log('==========')
-    //     console.log(sm.state)
-    //     console.log('==========')
-    // }, 2000)
+  const jumpToControlGroup = vscode.commands.registerCommand(
+    "sc2.jumpToControlGroup",
+    (args) => {
+      const { id } = args
+      if (isNullish(id)) throw new Error(`${logMod('jumpToControlGroup')} Missing 'id' arg`)
+      sm.jumpToGroup(id)
+    }
+  )
 
-    const addToControlGroup = vscode.commands.registerCommand('sc2.addToControlGroup', async (args) => {
-        const { id, createGroup } = args
-        console.log(`[addToControlGroup]: id: ${id} , createGroup: ${createGroup}`)
-        const mark = createMarkFromPos()
-        if (isNullish(id) || isNullish(createGroup)) throw new Error(`[addToControlGroup] Missing 'id' or 'createGroup' argument`)
-        if (isError<MarkData>(mark)) throw new Error(mark.message)
-        if (createGroup) {
-            sm.addToGroup(id, mark, true)
-            return console.log(sm.groups[id])
-        }
-        sm.addToGroup(id, mark)
-        console.log(sm.groups[id])
-    });
+  const cycleControlGroup = vscode.commands.registerCommand(
+    "sc2.cycle",
+    (args) => {
+      const { backwards } = args
+      if (isNullish(backwards)) throw new Error(`${logMod('cycleControlGroup')} Missing 'backwards' arg`)
+      sm.cycle()
+    }
+  )
 
-    const jumpToControlGroup = vscode.commands.registerCommand('sc2.jumpToControlGroup', (args) => {
-        const { id } = args
-        console.log(`[jumpToControlGroup]: id: ${id}`)
-        sm.jumpToGroup(id)
-    });
-
-    const cycleControlGroup = vscode.commands.registerCommand('sc2.cycle', (args) => {
-        const { backwards } = args
-        console.log(`[cycleControlGroup]: backwards ${backwards}`)
-        sm.cycle()
-    });
-
-    context.subscriptions.push(...[addToControlGroup, jumpToControlGroup, cycleControlGroup]);
+  context.subscriptions.push(
+    ...[addToControlGroup, jumpToControlGroup, cycleControlGroup]
+  )
 }
 
 export function deactivate() {
-    if (st) st.status.dispose()
+  if (st) st.status.dispose()
 }

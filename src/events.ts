@@ -1,3 +1,3 @@
-import { EventEmitter } from "vscode"
+import { EventEmitter } from "vscode";
 
 export const statusEmitter = new EventEmitter<string>()
