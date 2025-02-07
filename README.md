@@ -1,6 +1,6 @@
 <div style="display: flex; align-items: center;">
-    <img src="https://liquipedia.net/commons/images/8/86/Psionic_Transfer.png">
-    <span style="font-size: 24px;">&nbsp;vscode-control-groups</span>
+    <img src="./assets/shade_128.png">
+    <span style="font-size: 36px;">&nbsp;vscode-control-groups</span>
 </div>
 
 ---

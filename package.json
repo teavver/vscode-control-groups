@@ -6,11 +6,11 @@
     "name": "teavver"
   },
   "publisher": "teavver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "engines": {
     "vscode": "^1.96.0"
   },
-  "icon": "https://liquipedia.net/commons/images/8/86/Psionic_Transfer.png",
+  "icon": "./assets/shade_128.png",
   "repository": {
     "url": "https://github.com/teavver/vscode-control-groups"
   },
