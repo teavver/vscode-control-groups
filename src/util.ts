@@ -13,9 +13,11 @@ export const isError = <T>(val: T | Error): val is Error => val instanceof Error
 
 export const isNullish = (val: any): val is undefined | null => (val === undefined || val === null)
 
+export const compareObj = (obj1: object, obj2: object) => JSON.stringify(obj1) === JSON.stringify(obj2)
+
 export const createMarkFromPos = (): Error | MarkData => {
   try {
-    const editor = vscode.window.activeTextEditor;
+    const editor = vscode.window.activeTextEditor
     if (!editor) return new Error(`cannot getPosition - no editor open`)
     const sel = editor.selection
     const pos = sel.active

@@ -6,8 +6,8 @@ export class StatusText {
   public status
 
   constructor() {
-    this.status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000)
-    this.status.text = '[ CG ]'
+    this.status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, Number.MIN_SAFE_INTEGER -1)
+    this.status.text = '| CG INIT |'
     this.status.show()
 
     statusEmitter.event((newStatus: string) => {
