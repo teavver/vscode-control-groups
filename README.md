@@ -1,4 +1,10 @@
-# vscode-control-groups
+<div style="display: flex; align-items: center;">
+    <img src="./assets/shade.png" alt="shade">
+    <span style="font-size: 24px;">&nbsp;vscode-control-groups</span>
+</div>
+
+---
+
 sc2 control group bindings for vscode vim extension
 
 ### settings.json
@@ -64,6 +70,8 @@ this is what you need to add to your `settings.json` vscode file:
     }
   ]
 ```
+
+### defaults
 
 those are the keybinds the extension comes with:
 
@@ -151,3 +159,12 @@ those are the keybinds the extension comes with:
           }
       ]
 ```
+
+reserved keys by default:
+
+- some numeric arguments (11, 22, 33..99), tab and shift+tab
+- ctrl + 1..9 and shift + 1..9
+
+### notes
+
+- sc2 also allows `0` for control groups, i did not add it to the deafult binds since `0` is useful in vim

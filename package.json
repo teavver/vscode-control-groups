@@ -1,13 +1,17 @@
 {
   "name": "vscode-control-groups",
-  "displayName": "vscode-control-groups",
+  "displayName": "vscode sc2 control groups",
   "description": "sc2 control groups for vscodevim extension",
   "author": {
     "name": "teavver"
   },
+  "publisher": "teavver",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.96.0"
+  },
+  "repository": {
+    "url": "https://github.com/teavver/vscode-control-groups"
   },
   "activationEvents": [
     "onStartupFinished"
