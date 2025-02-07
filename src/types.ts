@@ -1,5 +1,7 @@
 import { Mark } from "./mark";
 
+export type Logger = (...args: any) => void
+
 export interface MarkData {
   uri: string
   line: number

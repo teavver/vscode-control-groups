@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { StateManager } from "./state";
 import { StatusText } from "./status";
 import { MarkData } from "./types";
-import { isDevMode, isError, createMarkFromPos, isNullish, logMod } from "./util";
+import { isError, createMarkFromPos, isNullish, logMod, createDebugLogger } from "./util";
 
 let st: StatusText | null = null
 
@@ -10,8 +10,8 @@ export function activate(context: vscode.ExtensionContext) {
   const vim = vscode.extensions.getExtension("vscodevim.vim")
   if (!vim) throw new Error("VSCODE vimExt EERROR")
 
-  const DEBUG = isDevMode(context.extensionMode)
-  const sm = new StateManager(DEBUG)
+  const dlog = createDebugLogger(context)
+  const sm = new StateManager(dlog)
   st = new StatusText()
 
   const addToControlGroup = vscode.commands.registerCommand(
