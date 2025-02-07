@@ -1,5 +1,5 @@
 <div style="display: flex; align-items: center;">
-    <img src="./assets/shade.png" alt="shade">
+    <img src="https://liquipedia.net/commons/images/8/86/Psionic_Transfer.png">
     <span style="font-size: 24px;">&nbsp;vscode-control-groups</span>
 </div>
 

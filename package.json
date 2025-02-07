@@ -10,6 +10,7 @@
   "engines": {
     "vscode": "^1.96.0"
   },
+  "icon": "https://liquipedia.net/commons/images/8/86/Psionic_Transfer.png",
   "repository": {
     "url": "https://github.com/teavver/vscode-control-groups"
   },
