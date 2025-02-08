@@ -15,10 +15,14 @@ export function activate(context: vscode.ExtensionContext) {
   const sm = new StateManager(dlog)
   const st = new StatusText()
 
+  const updateStatusBar = () => {
+    enabled ? statusEmitter.fire(sm.formatState()) : statusEmitter.fire(StatusText.DEFAULT_LABEL_OFF)
+  }
+
   const toggleExtension = vscode.commands.registerCommand(
     'sc2.toggle', () => {
-      enabled ? statusEmitter.fire(StatusText.DEFAULT_LABEL_OFF) : statusEmitter.fire(sm.formatState())
       enabled = !enabled
+      updateStatusBar()
     }
   )
 
@@ -61,6 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     ...[addToControlGroup, jumpToControlGroup, cycleControlGroup, toggleExtension, st.status]
   )
+  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBar));
 }
 
 export function deactivate() {}

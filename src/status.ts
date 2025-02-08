@@ -5,7 +5,7 @@ export class StatusText implements vscode.Disposable {
 
   public static readonly DEFAULT_LABEL_ON = '| CG |'
   public static readonly DEFAULT_LABEL_OFF = '| CG OFF |'
-  public status
+  public status: vscode.StatusBarItem
 
   constructor() {
     this.status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, Number.MIN_SAFE_INTEGER)
