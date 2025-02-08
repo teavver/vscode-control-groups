@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import { StateManager } from './state';
 import { MarkData } from './types';
-import { statusEmitter } from './events';
-import { StatusText } from './status';
+import { StatusBar } from './status';
 import { isError, createMarkFromPos, isNullish, logMod, createDebugLogger } from './util';
 
 let enabled = true
@@ -12,11 +11,11 @@ export function activate(context: vscode.ExtensionContext) {
   if (!vim) throw new Error('vscode-vim extension is not installed')
 
   const dlog = createDebugLogger(context)
-  const sm = new StateManager(dlog)
-  const st = new StatusText()
+  const st = new StatusBar()
+  const sm = new StateManager(dlog, st)
 
   const updateStatusBar = () => {
-    enabled ? statusEmitter.fire(sm.formatState()) : statusEmitter.fire(StatusText.DEFAULT_LABEL_OFF)
+    enabled ? st.update(sm.formatState()) : st.update(StatusBar.DEFAULT_LABEL_OFF)
   }
 
   const toggleExtension = vscode.commands.registerCommand(

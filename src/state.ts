@@ -1,11 +1,11 @@
 import { Mark } from "./mark";
-import { statusEmitter } from "./events";
 import { Map, Logger, ControlGroupData, ExtensionState, MarkData } from "./types";
 import { isEmpty, isNullish, obj, logMod, compareObj } from "./util";
-import { StatusText } from "./status";
+import { StatusBar } from "./status";
 
 export class StateManager {
   private readonly dlog: Logger
+  private readonly status: StatusBar
   private readonly FIRST_MARK_ID = 0
   private readonly MAX_MARKS_PER_GROUP = 9 // if you're cycling through 9+ marks you're really missing the point
   private readonly SUP: { [k: number]: string } = {
@@ -23,8 +23,9 @@ export class StateManager {
   public groups: Map<ControlGroupData>
   public state: ExtensionState
 
-  constructor(dlog: Logger) {
+  constructor(dlog: Logger, status: StatusBar) {
     this.dlog = dlog
+    this.status = status
     this.groups = {}
     this.state = {
       activeGroupId: -1,
@@ -33,7 +34,7 @@ export class StateManager {
 
   formatState() {
     const nonEmptyGroups = Object.keys(this.groups)
-    if (nonEmptyGroups.length === 0) return StatusText.DEFAULT_LABEL_ON 
+    if (nonEmptyGroups.length === 0) return StatusBar.DEFAULT_LABEL_ON 
     const activeGroup = this.state.activeGroupId.toString()
     const groupMarkCounts = nonEmptyGroups.map((id) => this.groups[id].marks.length)
     return `| ${nonEmptyGroups.map((group, idx) =>
@@ -55,7 +56,7 @@ export class StateManager {
     const mark = this.groups[id].marks[idx]
     this.groups[id].lastMarkId = idx
     mark.jump()
-    statusEmitter.fire(this.formatState())
+    this.status.update(this.formatState())
   }
 
   addToGroup(id: number, data: MarkData, createGroup: boolean = false) {
@@ -69,7 +70,7 @@ export class StateManager {
         lastMarkId: this.FIRST_MARK_ID,
         marks: [mark],
       }
-      return statusEmitter.fire(this.formatState())
+      return this.status.update(this.formatState())
     } else {
       const duplicate = target.marks.find((mark) =>
         compareObj(mark.data, data)
@@ -82,7 +83,7 @@ export class StateManager {
         marks: [...target.marks, mark],
       }
     }
-    return statusEmitter.fire(this.formatState())
+    return this.status.update(this.formatState())
   }
 
   cycle(backwards: boolean = false) {
