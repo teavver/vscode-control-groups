@@ -61,7 +61,13 @@ export function activate(context: vscode.ExtensionContext) {
     }
   )
 
-  context.subscriptions.push(addToControlGroup, jumpToControlGroup, cycleControlGroup, toggleExtension, sb)
+  const handleExtensionsChange = vscode.extensions.onDidChange(() => {
+    const ext = vscode.extensions.getExtension('teavver.vscode-control-groups')
+    enabled = ext && ext.isActive ? true : false
+    updateStatusBar()
+  })
+
+  context.subscriptions.push(sb, addToControlGroup, jumpToControlGroup, cycleControlGroup, toggleExtension, handleExtensionsChange)
   context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBar))
   context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(updateStatusBar))
 }
