@@ -1,9 +1,7 @@
 <div style="display: flex; align-items: center;">
     <img src="./assets/shade_128.png">
-    <span style="font-size: 36px;">&nbsp;vscode-control-groups</span>
+    <h1>&nbsp;vscode-control-groups</h1>
 </div>
-
----
 
 sc2 control group bindings for vscode vim extension
 
@@ -150,7 +148,7 @@ those are the keybinds the extension comes with:
             "args": { "backwards": false }
           },
 
-          // cycle backwards
+          // cycle backwards (WIP)
           {
             "command": "sc2.cycle",
             "key": "shift+Tab",
@@ -168,3 +166,9 @@ reserved keys by default:
 ### notes
 
 - sc2 also allows `0` for control groups, i did not add it to the deafult binds since `0` is useful in vim
+
+### todo
+
+- cycle through group backwards (shift+tab)
+- steal control groups option
+- readonly dump group (0 or space)
