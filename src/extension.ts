@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
   )
 
   context.subscriptions.push(
-    ...[addToControlGroup, jumpToControlGroup, cycleControlGroup, toggleExtension, st.status]
+    ...[addToControlGroup, jumpToControlGroup, cycleControlGroup, toggleExtension, st]
   )
   context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBar));
 }
