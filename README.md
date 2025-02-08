@@ -1,6 +1,6 @@
 <div style="display: flex; align-items: center;">
-    <img src="./assets/shade_128.png">
-    <h1>&nbsp;vscode-control-groups</h1>
+    <img src="https://liquipedia.net/commons/images/8/86/Psionic_Transfer.png">
+    <h1>vscode-control-groups</h1>
 </div>
 
 sc2 control group bindings for vscode vim extension
@@ -170,5 +170,6 @@ reserved keys by default:
 ### todo
 
 - cycle through group backwards (shift+tab)
+- save state to disk (per workspace)
 - steal control groups option
 - readonly dump group (0 or space)

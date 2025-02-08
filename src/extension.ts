@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   const addToControlGroup = vscode.commands.registerCommand(
     'sc2.addToControlGroup',
-    async (args) => {
+    async (args: any) => {
       if (!enabled) return
       const { id, createGroup } = args
       const mark = createMarkFromPos()
@@ -43,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   const jumpToControlGroup = vscode.commands.registerCommand(
     'sc2.jumpToControlGroup',
-    (args) => {
+    (args: any) => {
       if (!enabled) return
       const { id } = args
       if (isNullish(id)) throw new Error(`${logMod('jumpToControlGroup')} Missing 'id' arg`)
@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   const cycleControlGroup = vscode.commands.registerCommand(
     'sc2.cycle',
-    (args) => {
+    (args: any) => {
       if (!enabled) return
       const { backwards } = args
       if (isNullish(backwards)) throw new Error(`${logMod('cycleControlGroup')} Missing 'backwards' arg`)

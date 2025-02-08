@@ -7,7 +7,7 @@ export class StatusBar implements vscode.Disposable {
   public status: vscode.StatusBarItem
 
   constructor() {
-    this.status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, Number.MIN_SAFE_INTEGER)
+    this.status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, Number.MAX_SAFE_INTEGER)
     this.status.text = StatusBar.DEFAULT_LABEL_ON
     this.status.name = 'Control Groups Status'
     this.status.command = 'sc2.toggle'
