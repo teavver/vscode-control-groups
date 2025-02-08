@@ -66,4 +66,6 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(updateStatusBar))
 }
 
-export function deactivate() {}
+export function deactivate() {
+  if (sb) sb.dispose()
+}

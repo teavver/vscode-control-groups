@@ -34,7 +34,7 @@ export class StateManager {
 
   formatState() {
     const nonEmptyGroups = Object.keys(this.groups)
-    if (nonEmptyGroups.length === 0) return StatusBar.DEFAULT_LABEL_ON 
+    if (nonEmptyGroups.length === 0) return StatusBar.DEFAULT_LABEL_ON
     const activeGroup = this.state.activeGroupId.toString()
     const groupMarkCounts = nonEmptyGroups.map((id) => this.groups[id].marks.length)
     return `| ${nonEmptyGroups.map((group, idx) =>

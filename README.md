@@ -1,13 +1,12 @@
-<div style="display: flex; align-items: center;">
-    <img src="https://liquipedia.net/commons/images/8/86/Psionic_Transfer.png">
-    <h1>vscode-control-groups</h1>
-</div>
+![](./assets/shade_32.png) <b>vscode-control-groups</b>
+
+---
 
 sc2 control group bindings for vscode vim extension
 
 ### settings.json
 
-this is what you need to add to your `settings.json` vscode file:
+add this to your `settings.json` vscode file:
 
 ```json
   "vim.normalModeKeyBindingsNonRecursive": [
@@ -63,6 +62,50 @@ this is what you need to add to your `settings.json` vscode file:
         {
           "command": "sc2.setActiveControlGroup",
           "args": { "id": 5 }
+        }
+      ]
+    },
+        {
+      "before": ["6", "6"],
+      "after": ["<Esc>"],
+      "silent": true,
+      "commands": [
+        {
+          "command": "sc2.jumpToControlGroup",
+          "args": { "id": 6 }
+        }
+      ]
+    },
+    {
+      "before": ["7", "7"],
+      "after": ["<Esc>"],
+      "silent": true,
+      "commands": [
+        {
+          "command": "sc2.jumpToControlGroup",
+          "args": { "id": 7 }
+        }
+      ]
+    },
+    {
+      "before": ["8", "8"],
+      "after": ["<Esc>"],
+      "silent": true,
+      "commands": [
+        {
+          "command": "sc2.jumpToControlGroup",
+          "args": { "id": 8 }
+        }
+      ]
+    },
+    {
+      "before": ["9", "9"],
+      "after": ["<Esc>"],
+      "silent": true,
+      "commands": [
+        {
+          "command": "sc2.jumpToControlGroup",
+          "args": { "id": 9 }
         }
       ]
     }
