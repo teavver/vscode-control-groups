@@ -2,6 +2,7 @@ import { Mark } from "./mark";
 import { statusEmitter } from "./events";
 import { Map, Logger, ControlGroupData, ExtensionState, MarkData } from "./types";
 import { isEmpty, isNullish, obj, logMod, compareObj } from "./util";
+import { StatusText } from "./status";
 
 export class StateManager {
   private readonly dlog: Logger
@@ -32,6 +33,7 @@ export class StateManager {
 
   formatState() {
     const nonEmptyGroups = Object.keys(this.groups)
+    if (nonEmptyGroups.length === 0) return StatusText.DEFAULT_LABEL_ON 
     const activeGroup = this.state.activeGroupId.toString()
     const groupMarkCounts = nonEmptyGroups.map((id) => this.groups[id].marks.length)
     return `| ${nonEmptyGroups.map((group, idx) =>
