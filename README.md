@@ -16,7 +16,7 @@ add this to your `settings.json` vscode file:
       "silent": true,
       "commands": [
         {
-          "command": "sc2.setActiveControlGroup",
+          "command": "sc2.jumpToControlGroup",
           "args": { "id": 1 }
         }
       ]
@@ -27,7 +27,7 @@ add this to your `settings.json` vscode file:
       "silent": true,
       "commands": [
         {
-          "command": "sc2.setActiveControlGroup",
+          "command": "sc2.jumpToControlGroup",
           "args": { "id": 2 }
         }
       ]
@@ -38,7 +38,7 @@ add this to your `settings.json` vscode file:
       "silent": true,
       "commands": [
         {
-          "command": "sc2.setActiveControlGroup",
+          "command": "sc2.jumpToControlGroup",
           "args": { "id": 3 }
         }
       ]
@@ -49,7 +49,7 @@ add this to your `settings.json` vscode file:
       "silent": true,
       "commands": [
         {
-          "command": "sc2.setActiveControlGroup",
+          "command": "sc2.jumpToControlGroup",
           "args": { "id": 4 }
         }
       ]
@@ -60,12 +60,12 @@ add this to your `settings.json` vscode file:
       "silent": true,
       "commands": [
         {
-          "command": "sc2.setActiveControlGroup",
+          "command": "sc2.jumpToControlGroup",
           "args": { "id": 5 }
         }
       ]
     },
-        {
+    {
       "before": ["6", "6"],
       "after": ["<Esc>"],
       "silent": true,
@@ -109,7 +109,7 @@ add this to your `settings.json` vscode file:
         }
       ]
     }
-  ]
+  ],
 ```
 
 ### defaults
