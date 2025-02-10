@@ -57,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
       if (!enabled) return
       const { backwards } = args
       if (isNullish(backwards)) throw new Error(`${logMod('cycleControlGroup')} Missing 'backwards' arg`)
-      sm.cycle()
+      sm.cycle(backwards)
     }
   )
 

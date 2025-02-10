@@ -97,8 +97,9 @@ export class StateManager {
     const nextMark = target.marks[nextId]
     if (!nextMark) {
       this.dlog(`${logMod(this.cycle.name)} no next, back to 1st`)
-      target.lastMarkId = this.FIRST_MARK_ID
-      return this.jumpToGroup(activeGroupId, this.FIRST_MARK_ID)
+      const fullCycleId = backwards ? target.marks.length - 1 : this.FIRST_MARK_ID
+      target.lastMarkId = fullCycleId
+      return this.jumpToGroup(activeGroupId, fullCycleId)
     }
     this.dlog(`${logMod(this.cycle.name)} OK (${target.lastMarkId} -> ${nextId})`)
     target.lastMarkId = nextId
