@@ -25,7 +25,7 @@
     "commands": [
       {
         "command": "sc2.toggle",
-        "title": "Control Groups: Toggle Extension"
+        "title": "SC2 Control Groups: Toggle Extension"
       }
     ],
     "keybindings": [
@@ -133,6 +133,18 @@
         "when": "inputFocus && vim.mode == 'Normal'",
         "args": {
           "backwards": true
+        }
+      }
+    ],
+    "configuration":[
+      {
+        "title": "SC2 Control Groups",
+        "properties": {
+          "sc2.controlGroupStealing": {
+            "type": "boolean",
+            "markdownDescription": "Enable to remove units from previous control groups when assigning them to a new one",
+            "default": false
+          }
         }
       }
     ]

@@ -3,6 +3,7 @@ import { StateManager } from './state';
 import { MarkData } from './types';
 import { StatusBar } from './status';
 import { isError, createMarkFromPos, isNullish, logMod, createDebugLogger } from './util';
+import { Configuration } from './configuration';
 
 let enabled = true
 let sb = new StatusBar()
@@ -12,6 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
   if (!vim) throw new Error('vscode-vim extension is not installed')
 
   const dlog = createDebugLogger(context)
+  const conf = new Configuration(dlog)
   const sm = new StateManager(dlog, sb)
 
   const updateStatusBar = () => {
@@ -61,13 +63,11 @@ export function activate(context: vscode.ExtensionContext) {
     }
   )
 
-  const handleExtensionsChange = vscode.extensions.onDidChange(() => {
-    const ext = vscode.extensions.getExtension('teavver.vscode-control-groups')
-    enabled = ext && ext.isActive ? true : false
-    updateStatusBar()
-  })
+  vscode.workspace.onDidChangeConfiguration(event => {
+    conf.handleConfigChanges(event)
+  }, null, context.subscriptions)
 
-  context.subscriptions.push(sb, addToControlGroup, jumpToControlGroup, cycleControlGroup, toggleExtension, handleExtensionsChange)
+  context.subscriptions.push(sb, addToControlGroup, jumpToControlGroup, cycleControlGroup, toggleExtension)
   context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBar))
   context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(updateStatusBar))
 }

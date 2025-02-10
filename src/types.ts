@@ -2,6 +2,10 @@ import { Mark } from "./mark";
 
 export type Logger = (...args: any) => void
 
+export type ConfigVal = string | boolean | undefined
+
+export type Config = Record<string, ConfigVal>
+
 export interface MarkData {
   uri: string
   line: number
