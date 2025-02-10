@@ -191,7 +191,7 @@ those are the keybinds the extension comes with:
             "args": { "backwards": false }
           },
 
-          // cycle backwards (WIP)
+          // cycle backwards
           {
             "command": "sc2.cycle",
             "key": "shift+Tab",
@@ -212,7 +212,6 @@ reserved keys by default:
 
 ### todo
 
-- cycle through group backwards (shift+tab)
 - save state to disk (per workspace)
 - steal control groups option
 - readonly dump group (0 or space)

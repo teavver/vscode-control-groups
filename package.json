@@ -22,6 +22,12 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "sc2.toggle",
+        "title": "Control Groups: Toggle Extension"
+      }
+    ],
     "keybindings": [
       {
         "command": "sc2.addToControlGroup",
