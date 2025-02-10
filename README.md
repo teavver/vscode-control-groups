@@ -4,6 +4,8 @@
 
 sc2 control group bindings for vscode vim extension
 
+vsocode-vim is required for control groups to work properly: https://marketplace.visualstudio.com/items?itemName=vscodevim.vim
+
 ### settings.json
 
 add this to your `settings.json` vscode file:
@@ -112,6 +114,14 @@ add this to your `settings.json` vscode file:
   ],
 ```
 
+### extension configuration
+
+`sc2.controlGroupStealing` | `boolean` | default = `true`
+
+Enable to remove units from previous control groups when assigning them to a new one
+
+---
+
 ### defaults
 
 those are the keybinds the extension comes with:
@@ -119,11 +129,11 @@ those are the keybinds the extension comes with:
 ```json
       "keybindings": [
 
-          // add to group or create one if empty
+          // add to group or create one if empty (1-9)
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+1",
-              "when": "editorTextFocus",
+              "when": "inputFocus && vim.mode == 'Normal'",
               "args": { "id": 1, "createGroup": false }
           },
           {
@@ -135,23 +145,17 @@ those are the keybinds the extension comes with:
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+3",
-              "when": "editorTextFocus",
+              "when": "inputFocus && vim.mode == 'Normal'",
               "args": { "id": 3, "createGroup": false }
           },
+          // ...
           {
               "command": "sc2.addToControlGroup",
-              "key": "ctrl+4",
-              "when": "editorTextFocus",
-              "args": { "id": 4, "createGroup": false }
+              "key": "ctrl+0",
+              "when": "inputFocus && vim.mode == 'Normal'",
+              "args": { "id": 0, "createGroup": false }
           },
-          {
-              "command": "sc2.addToControlGroup",
-              "key": "ctrl+5",
-              "when": "editorTextFocus",
-              "args": { "id": 5, "createGroup": false }
-          },
-
-          // delete current group and add current mark to new group
+          // delete current group and add current mark to new group (1-9)
           {
             "command": "sc2.addToControlGroup",
             "key": "shift+1",
@@ -164,26 +168,14 @@ those are the keybinds the extension comes with:
             "when": "inputFocus && vim.mode == 'Normal'",
             "args": { "id": 2, "createGroup": true }
           },
+          // ...
           {
             "command": "sc2.addToControlGroup",
-            "key": "shift+3",
+            "key": "shift+0",
             "when": "inputFocus && vim.mode == 'Normal'",
-            "args": { "id": 3, "createGroup": true }
+            "args": { "id": 0, "createGroup": true }
           },
-          {
-            "command": "sc2.addToControlGroup",
-            "key": "shift+4",
-            "when": "inputFocus && vim.mode == 'Normal'",
-            "args": { "id": 4, "createGroup": true }
-          },
-          {
-            "command": "sc2.addToControlGroup",
-            "key": "shift+5",
-            "when": "inputFocus && vim.mode == 'Normal'",
-            "args": { "id": 5, "createGroup": true }
-          },
-
-          // cycle through marks in group
+          // cycle through marks in group (in the order they were set)
           {
             "command": "sc2.cycle",
             "key": "Tab",
@@ -201,17 +193,16 @@ those are the keybinds the extension comes with:
       ]
 ```
 
-reserved keys by default:
+reserved keys by default (only in NORMAL mode):
 
 - some numeric arguments (11, 22, 33..99), tab and shift+tab
 - ctrl + 1..9 and shift + 1..9
 
 ### notes
 
-- sc2 also allows `0` for control groups, i did not add it to the deafult binds since `0` is useful in vim
+- sc2 also allows `0` for control groups, i did not add it to the deafult binds since `0` is useful in vim, but you can use it as a dump group with group stealing on.
 
 ### todo
 
 - save state to disk (per workspace)
-- steal control groups option
-- readonly dump group (0 or space)
+- add 'readonly group ids' to configuration

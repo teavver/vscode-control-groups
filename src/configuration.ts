@@ -1,15 +1,14 @@
-import * as vscode from 'vscode'
-import { ConfigurationChangeEvent } from 'vscode'
-import { Config, ConfigVal, Logger } from './types'
-import { logMod, obj } from './util'
+import * as vscode from 'vscode';
+import { ConfigurationChangeEvent } from 'vscode';
+import { Config, ConfigVal, Logger } from './types';
+import { logMod, obj } from './util';
 
 export class Configuration {
 
   dlog: Logger
   public config: Config = {}
 
-  private readonly EXT_PREFIX = 'sc2'
-  private readonly SETTINGS = {
+  public static readonly SETTINGS = {
     GROUP_STEALING: 'controlGroupStealing',
   }
 
@@ -17,7 +16,7 @@ export class Configuration {
     this.dlog = dlog
     const config = vscode.workspace.getConfiguration('sc2')
     for (const key of Object.keys(config)) {
-      if (typeof key === 'string' && Object.values(this.SETTINGS).includes(key)) {
+      if (typeof key === 'string' && Object.values(Configuration.SETTINGS).includes(key)) {
         this.set(key, config[key])
       }
     }
@@ -26,12 +25,11 @@ export class Configuration {
 
   handleConfigChanges(event: ConfigurationChangeEvent) {
     // control group stealing
-    console.log("ConfigurationChangeEvent", event);
-    if (event.affectsConfiguration(`${this.EXT_PREFIX}.${this.SETTINGS.GROUP_STEALING}`)) {
-      const prev = this.get(this.SETTINGS.GROUP_STEALING)
-      const newVal = vscode.workspace.getConfiguration(this.EXT_PREFIX).get<boolean>(this.SETTINGS.GROUP_STEALING);
-      this.set(this.SETTINGS.GROUP_STEALING, newVal)
-      this.dlog(`${logMod(this.handleConfigChanges.name)} (${this.SETTINGS.GROUP_STEALING}) ${prev} -> ${newVal}`)
+    if (event.affectsConfiguration(`sc2.${Configuration.SETTINGS.GROUP_STEALING}`)) {
+      const prev = this.get(Configuration.SETTINGS.GROUP_STEALING)
+      const newVal = vscode.workspace.getConfiguration('sc2').get<boolean>(Configuration.SETTINGS.GROUP_STEALING)
+      this.set(Configuration.SETTINGS.GROUP_STEALING, newVal)
+      this.dlog(`${logMod(this.handleConfigChanges.name)} (${Configuration.SETTINGS.GROUP_STEALING}): ${prev} -> ${newVal}`)
     }
   }
 
