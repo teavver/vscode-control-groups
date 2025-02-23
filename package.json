@@ -32,7 +32,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "ctrl+1",
-        "when": "editorTextFocus",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 1,
           "createGroup": false
@@ -41,7 +41,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "ctrl+2",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 2,
           "createGroup": false
@@ -50,7 +50,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "ctrl+3",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 3,
           "createGroup": false
@@ -59,7 +59,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "ctrl+4",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 4,
           "createGroup": false
@@ -68,7 +68,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "ctrl+5",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 5,
           "createGroup": false
@@ -77,7 +77,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "ctrl+6",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 6,
           "createGroup": false
@@ -86,7 +86,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "ctrl+7",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 7,
           "createGroup": false
@@ -95,7 +95,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "ctrl+8",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 8,
           "createGroup": false
@@ -104,7 +104,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "ctrl+9",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 9,
           "createGroup": false
@@ -112,17 +112,8 @@
       },
       {
         "command": "sc2.addToControlGroup",
-        "key": "ctrl+0",
-        "when": "inputFocus && vim.mode == 'Normal'",
-        "args": {
-          "id": 0,
-          "createGroup": false
-        }
-      },
-      {
-        "command": "sc2.addToControlGroup",
         "key": "shift+1",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 1,
           "createGroup": true
@@ -131,7 +122,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "shift+2",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 2,
           "createGroup": true
@@ -140,7 +131,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "shift+3",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 3,
           "createGroup": true
@@ -149,7 +140,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "shift+4",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 4,
           "createGroup": true
@@ -158,7 +149,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "shift+5",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 5,
           "createGroup": true
@@ -167,7 +158,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "shift+6",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 6,
           "createGroup": true
@@ -176,7 +167,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "shift+7",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 7,
           "createGroup": true
@@ -185,7 +176,7 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "shift+8",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 8,
           "createGroup": true
@@ -194,25 +185,16 @@
       {
         "command": "sc2.addToControlGroup",
         "key": "shift+9",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "id": 9,
           "createGroup": true
         }
       },
       {
-        "command": "sc2.addToControlGroup",
-        "key": "shift+0",
-        "when": "inputFocus && vim.mode == 'Normal'",
-        "args": {
-          "id": 0,
-          "createGroup": true
-        }
-      },
-      {
         "command": "sc2.cycle",
         "key": "Tab",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "backwards": false
         }
@@ -220,7 +202,7 @@
       {
         "command": "sc2.cycle",
         "key": "shift+Tab",
-        "when": "inputFocus && vim.mode == 'Normal'",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
           "backwards": true
         }

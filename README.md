@@ -133,53 +133,53 @@ those are the keybinds the extension comes with:
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+1",
-              "when": "inputFocus && vim.mode == 'Normal'",
+              "when": "editorTextFocus && vim.mode == 'Normal'",
               "args": { "id": 1, "createGroup": false }
           },
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+2",
-              "when": "inputFocus && vim.mode == 'Normal'",
+              "when": "editorTextFocus && vim.mode == 'Normal'",
               "args": { "id": 2, "createGroup": false }
           },
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+3",
-              "when": "inputFocus && vim.mode == 'Normal'",
+              "when": "editorTextFocus && vim.mode == 'Normal'",
               "args": { "id": 3, "createGroup": false }
           },
           // ...
           {
               "command": "sc2.addToControlGroup",
-              "key": "ctrl+0",
-              "when": "inputFocus && vim.mode == 'Normal'",
-              "args": { "id": 0, "createGroup": false }
+              "key": "ctrl+9",
+              "when": "editorTextFocus && vim.mode == 'Normal'",
+              "args": { "id": 9, "createGroup": false }
           },
           // delete current group and add current mark to new group (1-9)
           {
             "command": "sc2.addToControlGroup",
             "key": "shift+1",
-            "when": "inputFocus && vim.mode == 'Normal'",
+            "when": "editorTextFocus && vim.mode == 'Normal'",
             "args": { "id": 1, "createGroup": true }
           },
           {
             "command": "sc2.addToControlGroup",
             "key": "shift+2",
-            "when": "inputFocus && vim.mode == 'Normal'",
+            "when": "editorTextFocus && vim.mode == 'Normal'",
             "args": { "id": 2, "createGroup": true }
           },
           // ...
           {
             "command": "sc2.addToControlGroup",
-            "key": "shift+0",
-            "when": "inputFocus && vim.mode == 'Normal'",
-            "args": { "id": 0, "createGroup": true }
+            "key": "shift+9",
+            "when": "editorTextFocus && vim.mode == 'Normal'",
+            "args": { "id": 9, "createGroup": true }
           },
           // cycle through marks in group (in the order they were set)
           {
             "command": "sc2.cycle",
             "key": "Tab",
-            "when": "inputFocus && vim.mode == 'Normal'",
+            "when": "editorTextFocus && vim.mode == 'Normal'",
             "args": { "backwards": false }
           },
 
@@ -187,7 +187,7 @@ those are the keybinds the extension comes with:
           {
             "command": "sc2.cycle",
             "key": "shift+Tab",
-            "when": "inputFocus && vim.mode == 'Normal'",
+            "when": "editorTextFocus && vim.mode == 'Normal'",
             "args": { "backwards": true }
           }
       ]
@@ -197,10 +197,6 @@ reserved keys by default (only in NORMAL mode):
 
 - some numeric arguments (11, 22, 33..99), tab and shift+tab
 - ctrl + 1..9 and shift + 1..9
-
-### notes
-
-- sc2 also allows `0` for control groups, i did not add it to the deafult binds since `0` is useful in vim, but you can use it as a dump group with group stealing on.
 
 ### todo
 
