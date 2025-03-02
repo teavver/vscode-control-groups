@@ -85,33 +85,6 @@
       },
       {
         "command": "sc2.addToControlGroup",
-        "key": "ctrl+7",
-        "when": "editorTextFocus && vim.mode == 'Normal'",
-        "args": {
-          "id": 7,
-          "createGroup": false
-        }
-      },
-      {
-        "command": "sc2.addToControlGroup",
-        "key": "ctrl+8",
-        "when": "editorTextFocus && vim.mode == 'Normal'",
-        "args": {
-          "id": 8,
-          "createGroup": false
-        }
-      },
-      {
-        "command": "sc2.addToControlGroup",
-        "key": "ctrl+9",
-        "when": "editorTextFocus && vim.mode == 'Normal'",
-        "args": {
-          "id": 9,
-          "createGroup": false
-        }
-      },
-      {
-        "command": "sc2.addToControlGroup",
         "key": "shift+1",
         "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {
@@ -165,33 +138,6 @@
         }
       },
       {
-        "command": "sc2.addToControlGroup",
-        "key": "shift+7",
-        "when": "editorTextFocus && vim.mode == 'Normal'",
-        "args": {
-          "id": 7,
-          "createGroup": true
-        }
-      },
-      {
-        "command": "sc2.addToControlGroup",
-        "key": "shift+8",
-        "when": "editorTextFocus && vim.mode == 'Normal'",
-        "args": {
-          "id": 8,
-          "createGroup": true
-        }
-      },
-      {
-        "command": "sc2.addToControlGroup",
-        "key": "shift+9",
-        "when": "editorTextFocus && vim.mode == 'Normal'",
-        "args": {
-          "id": 9,
-          "createGroup": true
-        }
-      },
-      {
         "command": "sc2.cycle",
         "key": "Tab",
         "when": "editorTextFocus && vim.mode == 'Normal'",
@@ -215,7 +161,17 @@
           "sc2.controlGroupStealing": {
             "type": "boolean",
             "markdownDescription": "Enable to remove units from previous control groups when assigning them to a new one",
-            "default": true
+            "default": false
+          }
+        }
+      },
+      {
+        "title": "SC2 Control Groups",
+        "properties": {
+          "sc2.normalModeOnFileChange": {
+            "type": "boolean",
+            "markdownDescription": "Switches to Normal mode when opening any file, ignoring the last saved mode",
+            "default": false
           }
         }
       }

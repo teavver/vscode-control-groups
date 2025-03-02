@@ -116,9 +116,13 @@ add this to your `settings.json` vscode file:
 
 ### extension configuration
 
-`sc2.controlGroupStealing` | `boolean` | default = `true`
+`sc2.controlGroupStealing` | `boolean` | default = `false`
 
 Enable to remove units from previous control groups when assigning them to a new one
+
+`sc2.normalModeOnFileChange` | `boolean` | default = `false`
+
+Switches to Normal mode when opening any file, ignoring the last saved mode
 
 ---
 
@@ -129,7 +133,7 @@ those are the keybinds the extension comes with:
 ```json
       "keybindings": [
 
-          // add to group or create one if empty (1-9)
+          // Ctrl + <1..6> add to group or create one if empty (1-6)
           {
               "command": "sc2.addToControlGroup",
               "key": "ctrl+1",
@@ -151,11 +155,11 @@ those are the keybinds the extension comes with:
           // ...
           {
               "command": "sc2.addToControlGroup",
-              "key": "ctrl+9",
+              "key": "ctrl+6",
               "when": "editorTextFocus && vim.mode == 'Normal'",
-              "args": { "id": 9, "createGroup": false }
+              "args": { "id": 6, "createGroup": false }
           },
-          // delete current group and add current mark to new group (1-9)
+          // Shift + <1..6> delete current group and add current mark to new group (1-6)
           {
             "command": "sc2.addToControlGroup",
             "key": "shift+1",
@@ -171,11 +175,11 @@ those are the keybinds the extension comes with:
           // ...
           {
             "command": "sc2.addToControlGroup",
-            "key": "shift+9",
+            "key": "shift+6",
             "when": "editorTextFocus && vim.mode == 'Normal'",
-            "args": { "id": 9, "createGroup": true }
+            "args": { "id": 6, "createGroup": true }
           },
-          // cycle through marks in group (in the order they were set)
+          // Tab = cycle through marks in group (in the order they were set)
           {
             "command": "sc2.cycle",
             "key": "Tab",
@@ -183,7 +187,7 @@ those are the keybinds the extension comes with:
             "args": { "backwards": false }
           },
 
-          // cycle backwards
+          // Tab + Shift = cycle backwards
           {
             "command": "sc2.cycle",
             "key": "shift+Tab",

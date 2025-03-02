@@ -10,6 +10,7 @@ export class Configuration {
 
   public static readonly SETTINGS = {
     GROUP_STEALING: 'controlGroupStealing',
+    NORMAL_MODE_ON_FILE_CHANGE: 'normalModeOnFileChange',
   }
 
   constructor(dlog: Logger) {
@@ -26,10 +27,15 @@ export class Configuration {
   handleConfigChanges(event: ConfigurationChangeEvent) {
     // control group stealing
     if (event.affectsConfiguration(`sc2.${Configuration.SETTINGS.GROUP_STEALING}`)) {
-      const prev = this.get(Configuration.SETTINGS.GROUP_STEALING)
       const newVal = vscode.workspace.getConfiguration('sc2').get<boolean>(Configuration.SETTINGS.GROUP_STEALING)
       this.set(Configuration.SETTINGS.GROUP_STEALING, newVal)
-      this.dlog(`${logMod(this.handleConfigChanges.name)} (${Configuration.SETTINGS.GROUP_STEALING}): ${prev} -> ${newVal}`)
+      this.dlog(`${logMod(this.handleConfigChanges.name)} (${Configuration.SETTINGS.GROUP_STEALING}) changed to: ${newVal}`)
+    }
+
+    if (event.affectsConfiguration(`sc2.${Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE}`)) {
+      const newVal = vscode.workspace.getConfiguration('sc2').get<boolean>(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)
+      this.set(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE, newVal)
+      this.dlog(`${logMod(this.handleConfigChanges.name)} (${Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE}) changed to: ${newVal}`)
     }
   }
 
