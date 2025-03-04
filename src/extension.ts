@@ -31,15 +31,13 @@ export function activate(context: vscode.ExtensionContext) {
     'sc2.addToControlGroup',
     async (args: any) => {
       if (!enabled) return
-      const { id, createGroup } = args
+      const id: number | undefined = args.id
+      const createGroup: boolean | undefined = args.createGroup
       const mark = createMarkFromPos()
       if (isNullish(id) || isNullish(createGroup))
         throw new Error(`${logMod('addToControlGroup')} Missing 'id' or 'createGroup' arg`)
       if (isError<MarkData>(mark)) throw new Error(`${logMod('addToControlGroup')} ${mark.message}`)
-      if (createGroup) {
-        return sm.addToGroup(id, mark, true)
-      }
-      sm.addToGroup(id, mark)
+      sm.addToGroup(id, mark, createGroup)
     }
   )
 
@@ -76,6 +74,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(sb, addToControlGroup, jumpToControlGroup, cycleControlGroup, toggleExtension)
   context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(handleTextEditorChange))
+  context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(updateStatusBar))
 }
 
 export function deactivate() {

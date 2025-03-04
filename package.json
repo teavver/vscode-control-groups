@@ -85,6 +85,15 @@
       },
       {
         "command": "sc2.addToControlGroup",
+        "key": "ctrl+space",
+        "when": "editorTextFocus && vim.mode == 'Normal'",
+        "args": {
+          "id": 0,
+          "createGroup": false
+        }
+      },
+      {
+        "command": "sc2.addToControlGroup",
         "key": "shift+1",
         "when": "editorTextFocus && vim.mode == 'Normal'",
         "args": {

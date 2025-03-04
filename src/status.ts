@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 
 export class StatusBar implements vscode.Disposable {
 
-  public static readonly DEFAULT_LABEL_ON = '| CG |'
-  public static readonly DEFAULT_LABEL_OFF = '| CG OFF |'
+  public static readonly DEFAULT_LABEL_ON = '(CG)'
+  public static readonly DEFAULT_LABEL_OFF = '(CG OFF)'
   public status: vscode.StatusBarItem
 
   constructor() {

@@ -2,9 +2,7 @@
 
 ---
 
-sc2 control group bindings for vscode vim extension
-
-vsocode-vim is required for control groups to work properly: https://marketplace.visualstudio.com/items?itemName=vscodevim.vim
+sc2 control group bindings for vscode-vim extension
 
 ### settings.json
 
@@ -128,8 +126,6 @@ Switches to Normal mode when opening any file, ignoring the last saved mode
 
 ### defaults
 
-those are the keybinds the extension comes with:
-
 ```json
       "keybindings": [
 
@@ -159,6 +155,13 @@ those are the keybinds the extension comes with:
               "when": "editorTextFocus && vim.mode == 'Normal'",
               "args": { "id": 6, "createGroup": false }
           },
+          // group 0 = dump group by default (non-jumpable)
+          {
+              "command": "sc2.addToControlGroup",
+              "key": "ctrl+space",
+              "when": "editorTextFocus && vim.mode == 'Normal'",
+              "args": { "id": 0, "createGroup": false }
+          },
           // Shift + <1..6> delete current group and add current mark to new group (1-6)
           {
             "command": "sc2.addToControlGroup",
@@ -186,7 +189,6 @@ those are the keybinds the extension comes with:
             "when": "editorTextFocus && vim.mode == 'Normal'",
             "args": { "backwards": false }
           },
-
           // Tab + Shift = cycle backwards
           {
             "command": "sc2.cycle",
@@ -196,12 +198,6 @@ those are the keybinds the extension comes with:
           }
       ]
 ```
-
-reserved keys by default (only in NORMAL mode):
-
-- some numeric arguments (11, 22, 33..99), tab and shift+tab
-- ctrl + 1..9 and shift + 1..9
-
 ### todo
 
 - save state to disk (per workspace)

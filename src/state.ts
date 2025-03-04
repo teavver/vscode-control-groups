@@ -10,7 +10,7 @@ export class StateManager {
   private readonly status: StatusBar
   private readonly FIRST_MARK_ID = 0
   private readonly MAX_MARKS_PER_GROUP = 9 // if you're cycling through 9+ marks you're really missing the point
-  private readonly SUP: { [k: number]: string } = {
+  private readonly SUB: { [k: number]: string } = {
     0: '',
     1: '₁',
     2: '₂',
@@ -65,8 +65,8 @@ export class StateManager {
     const groupMarkCounts = groups.map((id) => this.groups[id].marks.length)
     return `| ${groups.map((gId, idx) =>
       gId === activeGroup
-        ? ` *${gId}${this.SUP[groupMarkCounts[idx]] ?? ''} `
-        : ` ${gId}${this.SUP[groupMarkCounts[idx]] ?? ''} `
+        ? ` *${gId}${this.SUB[groupMarkCounts[idx]] ?? ''} `
+        : ` ${gId}${this.SUB[groupMarkCounts[idx]] ?? ''} `
     ).join(' ')} |`
   }
 

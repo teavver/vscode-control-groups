@@ -25,13 +25,13 @@ export class Configuration {
   }
 
   handleConfigChanges(event: ConfigurationChangeEvent) {
-    // control group stealing
+    // Control Group Stealing
     if (event.affectsConfiguration(`sc2.${Configuration.SETTINGS.GROUP_STEALING}`)) {
       const newVal = vscode.workspace.getConfiguration('sc2').get<boolean>(Configuration.SETTINGS.GROUP_STEALING)
       this.set(Configuration.SETTINGS.GROUP_STEALING, newVal)
       this.dlog(`${logMod(this.handleConfigChanges.name)} (${Configuration.SETTINGS.GROUP_STEALING}) changed to: ${newVal}`)
     }
-
+    // Normal Mode On File Change 
     if (event.affectsConfiguration(`sc2.${Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE}`)) {
       const newVal = vscode.workspace.getConfiguration('sc2').get<boolean>(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)
       this.set(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE, newVal)
