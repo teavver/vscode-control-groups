@@ -64,21 +64,21 @@ export function activate(context: vscode.ExtensionContext) {
     conf.handleConfigChanges(event)
   }, null, context.subscriptions)
 
-  const handleTextEditorChange = async () => {
-    updateStatusBar()
+  const handleTextEditorChange = async (editor: vscode.TextEditor | undefined) => {
+    if (editor) updateStatusBar()
     if (conf.get(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)) {
       await vscode.commands.executeCommand('vim.remap', { after: ['<Esc>'] }) // Switch to normal mode
     }
   }
 
+  if (vscode.window.activeTextEditor) updateStatusBar()
+  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor((editor) => handleTextEditorChange(editor)))
   context.subscriptions.push(
     sb,
     addToControlGroup,
     jumpToControlGroup,
     cycleControlGroup,
     toggleExtension,
-    vscode.window.onDidChangeActiveTextEditor(handleTextEditorChange),
-    vscode.workspace.onDidChangeTextDocument(updateStatusBar)
   )
 }
 
