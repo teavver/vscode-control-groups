@@ -63,11 +63,11 @@ export class StateManager {
     if (groups.length === 0) return StatusBar.DEFAULT_LABEL_ON
     const activeGroup = this.state.activeGroupId.toString()
     const groupMarkCounts = groups.map((id) => this.groups[id].marks.length)
-    return `| ${groups.map((gId, idx) =>
+    return `${groups.map((gId, idx) =>
       gId === activeGroup
         ? ` *${gId}${this.SUB[groupMarkCounts[idx]] ?? ''} `
         : ` ${gId}${this.SUB[groupMarkCounts[idx]] ?? ''} `
-    ).join(' ')} |`
+    ).join(' ')}`
   }
 
   jumpToGroup(id: number, markId?: number) {
