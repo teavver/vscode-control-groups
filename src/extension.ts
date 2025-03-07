@@ -5,10 +5,9 @@ import { StatusBar } from './status';
 import { isError, createMarkFromPos, isNullish, logMod, createDebugLogger } from './util';
 import { Configuration } from './configuration';
 
-let enabled = true
-let sb = new StatusBar()
-
 export function activate(context: vscode.ExtensionContext) {
+  let enabled = true
+  const sb = new StatusBar()
   const vim = vscode.extensions.getExtension('vscodevim.vim')
   if (!vim) throw new Error('vscode-vim extension is not installed')
 
@@ -72,11 +71,15 @@ export function activate(context: vscode.ExtensionContext) {
     }
   }
 
-  context.subscriptions.push(sb, addToControlGroup, jumpToControlGroup, cycleControlGroup, toggleExtension)
-  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(handleTextEditorChange))
-  context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(updateStatusBar))
+  context.subscriptions.push(
+    sb,
+    addToControlGroup,
+    jumpToControlGroup,
+    cycleControlGroup,
+    toggleExtension,
+    vscode.window.onDidChangeActiveTextEditor(handleTextEditorChange),
+    vscode.workspace.onDidChangeTextDocument(updateStatusBar)
+  )
 }
 
-export function deactivate() {
-  if (sb) sb.dispose()
-}
+export function deactivate() {}
