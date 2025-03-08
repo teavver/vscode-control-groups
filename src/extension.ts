@@ -6,11 +6,10 @@ import { isError, createMarkFromPos, isNullish, logMod, createDebugLogger } from
 import { Configuration } from './configuration';
 
 export function activate(context: vscode.ExtensionContext) {
-  let enabled = true
-  const sb = new StatusBar()
   const vim = vscode.extensions.getExtension('vscodevim.vim')
   if (!vim) throw new Error('vscode-vim extension is not installed')
-
+  let enabled = true
+  const sb = new StatusBar()
   const dlog = createDebugLogger(context)
   const conf = new Configuration(dlog)
   const sm = new StateManager(dlog, conf, sb)
@@ -64,21 +63,21 @@ export function activate(context: vscode.ExtensionContext) {
     conf.handleConfigChanges(event)
   }, null, context.subscriptions)
 
-  const handleTextEditorChange = async (editor: vscode.TextEditor | undefined) => {
-    if (editor) updateStatusBar()
+  const handleTextEditorChange = async () => {
+    updateStatusBar()
     if (conf.get(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)) {
       await vscode.commands.executeCommand('vim.remap', { after: ['<Esc>'] }) // Switch to normal mode
     }
   }
 
-  if (vscode.window.activeTextEditor) updateStatusBar()
-  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor((editor) => handleTextEditorChange(editor)))
   context.subscriptions.push(
-    sb,
+    sb.status,
     addToControlGroup,
     jumpToControlGroup,
     cycleControlGroup,
     toggleExtension,
+    vscode.window.onDidChangeActiveTextEditor(handleTextEditorChange),
+    vscode.workspace.onDidChangeTextDocument(updateStatusBar)
   )
 }
 
