@@ -66,6 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
   const handleTextEditorChange = async () => {
     updateStatusBar()
     if (conf.get(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)) {
+      await vscode.commands.executeCommand('editor.action.focusEditor');
       await vscode.commands.executeCommand('vim.remap', { after: ['<Esc>'] }) // Switch to normal mode
     }
   }
@@ -81,4 +82,4 @@ export function activate(context: vscode.ExtensionContext) {
   )
 }
 
-export function deactivate() {}
+export function deactivate() { }
