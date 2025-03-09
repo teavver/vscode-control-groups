@@ -66,25 +66,6 @@ export function activate(context: vscode.ExtensionContext) {
   const handleTextEditorChange = async () => {
     updateStatusBar()
     if (conf.get(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)) {
-      const editor = vscode.window.activeTextEditor
-      if (!editor) return
-      const activeTab = vscode.window.tabGroups.activeTabGroup.activeTab
-      if (activeTab?.input instanceof vscode.TabInputTextDiff) return // Ignore diff files
-      if (editor.document.uri.query.includes('git')) return
-
-      const focusedEditor = await vscode.window.showTextDocument(
-        editor.document,
-        {
-          viewColumn: editor.viewColumn,
-          preserveFocus: false,
-          preview: false
-        }
-      )
-
-      focusedEditor.revealRange(
-        focusedEditor.selection,
-        vscode.TextEditorRevealType.InCenter
-      )
       await vscode.commands.executeCommand('vim.remap', { after: ['<Esc>'] }) // Switch to normal mode
     }
   }
