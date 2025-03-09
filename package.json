@@ -6,7 +6,7 @@
     "name": "teavver"
   },
   "publisher": "teavver",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "engines": {
     "vscode": "^1.96.0"
   },
