@@ -68,6 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (conf.get(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)) {
       const editor = vscode.window.activeTextEditor
       if (!editor) return
+      if (editor.document.uri.scheme !== 'file') return // Do not trigger this on diff files
       editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenter)
       if (!editor.viewColumn) await vscode.window.showTextDocument(editor.document, editor.viewColumn)
       await vscode.commands.executeCommand('vim.remap', { after: ['<Esc>'] }) // Switch to normal mode
