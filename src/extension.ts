@@ -66,7 +66,10 @@ export function activate(context: vscode.ExtensionContext) {
   const handleTextEditorChange = async () => {
     updateStatusBar()
     if (conf.get(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)) {
-      await vscode.commands.executeCommand('editor.action.focusEditor');
+      const editor = vscode.window.activeTextEditor
+      if (!editor) return
+      editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenter)
+      if (!editor.viewColumn) await vscode.window.showTextDocument(editor.document, editor.viewColumn)
       await vscode.commands.executeCommand('vim.remap', { after: ['<Esc>'] }) // Switch to normal mode
     }
   }
