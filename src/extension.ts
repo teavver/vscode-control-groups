@@ -65,6 +65,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   const handleTextEditorChange = async () => {
     updateStatusBar()
+    const activeTab = vscode.window.tabGroups.activeTabGroup.activeTab
+    if (activeTab?.input instanceof vscode.TabInputTextDiff) return
     if (conf.get(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)) {
       await vscode.commands.executeCommand('vim.remap', { after: ['<Esc>'] }) // Switch to normal mode
     }
