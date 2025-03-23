@@ -41,21 +41,21 @@ export function activate(context: vscode.ExtensionContext) {
 
   const jumpToControlGroup = vscode.commands.registerCommand(
     'sc2.jumpToControlGroup',
-    (args: any) => {
+    async (args: any) => {
       if (!enabled) return
       const { id } = args
       if (isNullish(id)) throw new Error(`${logMod('jumpToControlGroup')} Missing 'id' arg`)
-      sm.jumpToGroup(id)
+      await sm.jumpToGroup(id)
     }
   )
 
   const cycleControlGroup = vscode.commands.registerCommand(
     'sc2.cycle',
-    (args: any) => {
+    async (args: any) => {
       if (!enabled) return
       const { backwards } = args
       if (isNullish(backwards)) throw new Error(`${logMod('cycleControlGroup')} Missing 'backwards' arg`)
-      sm.cycle(backwards)
+      await sm.cycle(backwards)
     }
   )
 

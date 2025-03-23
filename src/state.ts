@@ -70,7 +70,7 @@ export class StateManager {
     ).join(' ')}`
   }
 
-  jumpToGroup(id: number, markId?: number) {
+  async jumpToGroup(id: number, markId?: number) {
     const target = this.groups[id.toString()]
     if (isNullish(target) || isEmpty(target.marks)) return
     this.state.activeGroupId = id
@@ -81,8 +81,7 @@ export class StateManager {
     this.dlog(`${logMod(this.jumpToGroup.name)} Args: ${[id, markId,]} Jump idx: ${idx}`)
     const mark = this.groups[id].marks[idx]
     this.groups[id].lastMarkId = idx
-    mark.jump()
-    this.status.update(this.formatState())
+    mark.jump().then(() => this.status.update(this.formatState()))
   }
 
   addToGroup(id: number, data: MarkData, createGroup: boolean = false) {
@@ -124,7 +123,7 @@ export class StateManager {
     this.status.update(this.formatState())
   }
 
-  cycle(backwards: boolean = false) {
+  async cycle(backwards: boolean = false) {
     const activeGroupId = this.state.activeGroupId
     const target = this.groups[activeGroupId]
     this.dlog(`${logMod(this.cycle.name)} Args: ${[backwards]}`)
@@ -137,10 +136,10 @@ export class StateManager {
       this.dlog(`${logMod(this.cycle.name)} no next, back to 1st`)
       const fullCycleId = backwards ? target.marks.length - 1 : this.FIRST_MARK_ID
       target.lastMarkId = fullCycleId
-      return this.jumpToGroup(activeGroupId, fullCycleId)
+      return await this.jumpToGroup(activeGroupId, fullCycleId)
     }
     this.dlog(`${logMod(this.cycle.name)} OK (${target.lastMarkId} -> ${nextId})`)
     target.lastMarkId = nextId
-    this.jumpToGroup(activeGroupId, nextId)
+    await this.jumpToGroup(activeGroupId, nextId)
   }
 }

@@ -16,6 +16,7 @@ export class StatusBar implements vscode.Disposable {
 
   update(text: string) {
     this.status.text = text
+    this.status.show()
   }
 
   dispose() {
