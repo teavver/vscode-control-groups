@@ -9,13 +9,13 @@ export class Mark {
     this.data = data
   }
 
-  async jump() {
-    const uri = vscode.Uri.parse(this.data.uri)
-    const document = await vscode.workspace.openTextDocument(uri);
-    const editor = await vscode.window.showTextDocument(document);
-    const pos = new vscode.Position(this.data.line, this.data.char);
-    const sel = new vscode.Selection(pos, pos);
-    editor.selection = sel;
-    editor.revealRange(new vscode.Range(pos, pos));
+  static async jump(mark: Mark) {
+    const uri = vscode.Uri.parse(mark.data.uri)
+    const document = await vscode.workspace.openTextDocument(uri)
+    const editor = await vscode.window.showTextDocument(document)
+    const pos = new vscode.Position(mark.data.line, mark.data.char)
+    const sel = new vscode.Selection(pos, pos)
+    editor.selection = sel
+    editor.revealRange(new vscode.Range(pos, pos))
   }
 }

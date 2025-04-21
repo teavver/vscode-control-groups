@@ -1,5 +1,6 @@
+import * as vscode from 'vscode';
 import { Mark } from "./mark";
-import { Map, Logger, ControlGroupData, ExtensionState, MarkData } from "./types";
+import { Logger, ExtensionState, MarkData } from "./types";
 import { isEmpty, isNullish, obj, logMod, compareObj } from "./util";
 import { StatusBar } from "./status";
 import { Configuration } from "./configuration";
@@ -8,6 +9,8 @@ export class StateManager {
   private readonly dlog: Logger
   private readonly config: Configuration
   private readonly status: StatusBar
+
+  private readonly DISK_STATE_KEY = 'sc2.groups'
   private readonly FIRST_MARK_ID = 0
   private readonly MAX_MARKS_PER_GROUP = 9 // if you're cycling through 9+ marks you're really missing the point
   private readonly SUB: { [k: number]: string } = {
@@ -23,16 +26,26 @@ export class StateManager {
     9: '₉',
   }
 
-  public groups: Map<ControlGroupData>
+  private context: vscode.ExtensionContext
   public state: ExtensionState
 
-  constructor(dlog: Logger, config: Configuration, status: StatusBar) {
-    this.dlog = dlog
+  constructor(extContext: vscode.ExtensionContext, dlog: Logger, config: Configuration, status: StatusBar) {
+    this.context = extContext
     this.status = status
     this.config = config
-    this.groups = {}
-    this.state = {
-      activeGroupId: -1,
+    this.dlog = dlog
+
+    // context.workspaceState.update(this.DISK_STATE_KEY, {})
+    const diskState = this.context.workspaceState.get(this.DISK_STATE_KEY) as ExtensionState
+    console.log('>>>> ', JSON.stringify(diskState, null, 4))
+    if (Object.keys(diskState).length > 0) {
+      this.state = diskState
+      this.status.update(this.formatState())
+    } else {
+      this.state = {
+        activeGroupId: -1,
+        groups: {}
+      }
     }
   }
 
@@ -43,7 +56,7 @@ export class StateManager {
   private getMarkToSteal(mark: Mark): [string, number] | null {
     let groupId: string | null = null
     let markIdx: number | null = null
-    for (const [gId, gData] of Object.entries(this.groups)) {
+    for (const [gId, gData] of Object.entries(this.state.groups)) {
       const isValidGroup = Array.isArray(gData.marks) && gData.marks.length > 0
       if (isValidGroup) {
         const idx = gData.marks.findIndex((m) => compareObj(m.data, mark.data))
@@ -59,10 +72,10 @@ export class StateManager {
   }
 
   formatState() {
-    const groups = Object.keys(this.groups)
+    const groups = Object.keys(this.state.groups)
     if (groups.length === 0) return StatusBar.DEFAULT_LABEL_ON
     const activeGroup = this.state.activeGroupId.toString()
-    const groupMarkCounts = groups.map((id) => this.groups[id].marks.length)
+    const groupMarkCounts = groups.map((id) => this.state.groups[id].marks.length)
     return `${groups.map((gId, idx) =>
       gId === activeGroup
         ? ` *${gId}${this.SUB[groupMarkCounts[idx]] ?? ''} `
@@ -71,20 +84,25 @@ export class StateManager {
   }
 
   async jumpToGroup(id: number, markId?: number) {
-    const target = this.groups[id.toString()]
+    const groups = this.state.groups
+    const target = groups[id.toString()]
     if (isNullish(target) || isEmpty(target.marks)) return
     this.state.activeGroupId = id
     // Jump to most-recently visited/added mark in group by default
     const idx = isNullish(markId)
-      ? this.groups[id.toString()].lastMarkId
+      ? groups[id.toString()].lastMarkId
       : markId
     this.dlog(`${logMod(this.jumpToGroup.name)} Args: ${[id, markId,]} Jump idx: ${idx}`)
-    const mark = this.groups[id].marks[idx]
-    this.groups[id].lastMarkId = idx
-    mark.jump().then(() => this.status.update(this.formatState()))
+    const mark = groups[id].marks[idx]
+    groups[id].lastMarkId = idx
+    await Mark.jump(mark)
+    const newState: ExtensionState = { ...this.state, groups }
+    this.context.workspaceState.update(this.DISK_STATE_KEY, newState)
+      .then(() => this.status.update(this.formatState()))
   }
 
   addToGroup(id: number, data: MarkData, createGroup: boolean = false) {
+    const groups = this.state.groups
     const mark = new Mark(data)
     this.dlog(`${logMod(this.addToGroup.name)} Args: ${[id, obj(data), createGroup]}`)
     // handle 'controlGroupStealing' setting
@@ -93,39 +111,44 @@ export class StateManager {
       if (Array.isArray(stealMark)) {
         const [groupId, markIdx] = stealMark
         this.dlog(`${logMod(this.addToGroup.name)} Stealing mark, groupId: ${groupId}, markIdx: ${markIdx}`)
-        this.groups[groupId] = {
+        groups[groupId] = {
           lastMarkId: this.FIRST_MARK_ID, // reset to first after stealing from the group
-          marks: this.groups[groupId].marks.filter((_, i) => i !== markIdx)
+          marks: groups[groupId].marks.filter((_, i) => i !== markIdx)
         }
-        if (this.groups[groupId].marks.length === 0) {
-          delete this.groups[groupId]
+        if (groups[groupId].marks.length === 0) {
+          delete groups[groupId]
         }
       }
     }
     this.state.activeGroupId = id
-    const target = this.groups[id.toString()]
+    const target = groups[id.toString()]
     // create mode (delete entire group and add this mark to it)
     if (createGroup || !target) {
-      this.groups[id.toString()] = {
+      groups[id.toString()] = {
         lastMarkId: this.FIRST_MARK_ID,
         marks: [mark],
       }
-      return this.status.update(this.formatState())
+      const newState: ExtensionState = { activeGroupId: id, groups }
+      this.context.workspaceState.update(this.DISK_STATE_KEY, newState)
+        .then(() => this.status.update(this.formatState()))
+      return
     }
     const duplicate = target.marks.find((m) => compareObj(m.data, data))
     if (duplicate) return
     if (target.marks.length === this.MAX_MARKS_PER_GROUP) return
     // add mode
-    this.groups[id.toString()] = {
+    groups[id.toString()] = {
       lastMarkId: target.marks.length,
       marks: [...target.marks, mark],
     }
-    this.status.update(this.formatState())
+    const newState: ExtensionState = { activeGroupId: id, groups }
+    this.context.workspaceState.update(this.DISK_STATE_KEY, newState)
+      .then(() => this.status.update(this.formatState()))
   }
 
   async cycle(backwards: boolean = false) {
     const activeGroupId = this.state.activeGroupId
-    const target = this.groups[activeGroupId]
+    const target = this.state.groups[activeGroupId]
     this.dlog(`${logMod(this.cycle.name)} Args: ${[backwards]}`)
     if (isNullish(target) || isEmpty(target.marks)) return
     const isSingleMarkGroup = target.marks.length <= 1

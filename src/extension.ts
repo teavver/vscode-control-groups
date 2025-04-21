@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
   const sb = new StatusBar()
   const dlog = createDebugLogger(context)
   const conf = new Configuration(dlog)
-  const sm = new StateManager(dlog, conf, sb)
+  const sm = new StateManager(context, dlog, conf, sb)
 
   const updateStatusBar = () => {
     enabled ? sb.update(sm.formatState()) : sb.update(StatusBar.DEFAULT_LABEL_OFF)

@@ -18,6 +18,7 @@ export interface Map<T> {
 
 export interface ExtensionState {
   activeGroupId: number
+  groups: Map<ControlGroupData>
 }
 
 export interface ControlGroupData {
