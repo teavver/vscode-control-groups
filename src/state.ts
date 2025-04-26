@@ -165,4 +165,12 @@ export class StateManager {
     target.lastMarkId = nextId
     await this.jumpToGroup(activeGroupId, nextId)
   }
+
+  async resetGroups() {
+    this.dlog(`${logMod(this.resetGroups.name)} resetting all groups...`)
+    const newState: ExtensionState = { activeGroupId: -1, groups: {} }
+    this.state = newState
+    this.context.workspaceState.update(this.DISK_STATE_KEY, newState)
+      .then(() => this.status.update(this.formatState()))
+  }
 }

@@ -18,10 +18,16 @@ export function activate(context: vscode.ExtensionContext) {
     enabled ? sb.update(sm.formatState()) : sb.update(StatusBar.DEFAULT_LABEL_OFF)
   }
 
-  const toggleExtension = vscode.commands.registerCommand(
+  const toggleExtensionCommand = vscode.commands.registerCommand(
     'sc2.toggle', () => {
       enabled = !enabled
       updateStatusBar()
+    }
+  )
+
+  const resetGroupsCommand = vscode.commands.registerCommand(
+    'sc2.resetGroups', async () => {
+      await sm.resetGroups()
     }
   )
 
@@ -77,7 +83,8 @@ export function activate(context: vscode.ExtensionContext) {
     addToControlGroup,
     jumpToControlGroup,
     cycleControlGroup,
-    toggleExtension,
+    toggleExtensionCommand,
+    resetGroupsCommand,
     vscode.window.onDidChangeActiveTextEditor(handleTextEditorChange),
     vscode.workspace.onDidChangeTextDocument(updateStatusBar)
   )

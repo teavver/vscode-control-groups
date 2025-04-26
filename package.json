@@ -26,6 +26,10 @@
       {
         "command": "sc2.toggle",
         "title": "SC2 Control Groups: Toggle Extension"
+      },
+      {
+        "command": "sc2.resetGroups",
+        "title": "SC2 Control Groups: Reset & clean all groups"
       }
     ],
     "keybindings": [
