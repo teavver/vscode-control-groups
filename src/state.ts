@@ -34,23 +34,22 @@ export class StateManager {
     this.status = status
     this.config = config
     this.dlog = dlog
-
-    // context.workspaceState.update(this.DISK_STATE_KEY, {})
     const diskState = this.context.workspaceState.get(this.DISK_STATE_KEY) as ExtensionState
-    console.log('>>>> ', JSON.stringify(diskState, null, 4))
-    if (Object.keys(diskState).length > 0) {
-      this.state = diskState
-      this.status.update(this.formatState())
-    } else {
+    if (isNullish(diskState) || Object.keys(diskState).length < 1) {
       this.state = {
         activeGroupId: -1,
         groups: {}
       }
+    } else {
+      this.state = diskState
+      this.status.update(this.formatState())
     }
   }
 
   /**
-   * Find the duplicate mark and get its previous group (if exists)
+   * For control group stealing;
+   * Jumping to a mark in group 2 and adding it to group 3
+   * will remove it from group 2 and add it to group 3 instead of having the same location in two groups.
    * @returns id of group & idx of mark to delete
    */
   private getMarkToSteal(mark: Mark): [string, number] | null {
@@ -88,6 +87,9 @@ export class StateManager {
     const target = groups[id.toString()]
     if (isNullish(target) || isEmpty(target.marks)) return
     this.state.activeGroupId = id
+
+    // TODO: Handle split view focus jump
+
     // Jump to most-recently visited/added mark in group by default
     const idx = isNullish(markId)
       ? groups[id.toString()].lastMarkId
@@ -105,7 +107,7 @@ export class StateManager {
     const groups = this.state.groups
     const mark = new Mark(data)
     this.dlog(`${logMod(this.addToGroup.name)} Args: ${[id, obj(data), createGroup]}`)
-    // handle 'controlGroupStealing' setting
+    // Handle 'controlGroupStealing' setting
     if (this.config.get(Configuration.SETTINGS.GROUP_STEALING)) {
       const stealMark = this.getMarkToSteal(mark)
       if (Array.isArray(stealMark)) {
@@ -122,7 +124,7 @@ export class StateManager {
     }
     this.state.activeGroupId = id
     const target = groups[id.toString()]
-    // create mode (delete entire group and add this mark to it)
+    // Create mode (delete entire group and add this mark to it)
     if (createGroup || !target) {
       groups[id.toString()] = {
         lastMarkId: this.FIRST_MARK_ID,
@@ -136,7 +138,7 @@ export class StateManager {
     const duplicate = target.marks.find((m) => compareObj(m.data, data))
     if (duplicate) return
     if (target.marks.length === this.MAX_MARKS_PER_GROUP) return
-    // add mode
+    // Add mode
     groups[id.toString()] = {
       lastMarkId: target.marks.length,
       marks: [...target.marks, mark],
@@ -167,6 +169,7 @@ export class StateManager {
   }
 
   async resetGroups() {
+    // Command: sc2.resetGroups
     this.dlog(`${logMod(this.resetGroups.name)} resetting all groups...`)
     const newState: ExtensionState = { activeGroupId: -1, groups: {} }
     this.state = newState

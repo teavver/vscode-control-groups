@@ -120,7 +120,7 @@ Enable to remove units from previous control groups when assigning them to a new
 
 `sc2.normalModeOnFileChange` | `boolean` | default = `false`
 
-Switches to Normal mode when opening any file, ignoring the last saved mode
+Switches to Normal mode when opening any file, ignoring the vim mode that file was left in
 
 ---
 
@@ -200,5 +200,4 @@ Switches to Normal mode when opening any file, ignoring the last saved mode
 ```
 ### todo
 
-- save state to disk (per workspace)
-- add 'readonly group ids' to configuration
+- add 'readonly group ids' to group configuration
