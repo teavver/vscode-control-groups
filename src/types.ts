@@ -1,4 +1,4 @@
-import { Mark } from "./mark";
+import { Mark } from "./mark"
 
 export type Logger = (...args: any) => void
 

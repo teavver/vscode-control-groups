@@ -1,42 +1,48 @@
-import * as vscode from 'vscode';
-import { ConfigurationChangeEvent } from 'vscode';
-import { Config, ConfigVal, Logger } from './types';
-import { logMod, obj } from './util';
+import * as vscode from "vscode"
+import { ConfigurationChangeEvent } from "vscode"
+import { Config, ConfigVal, Logger } from "./types"
+import { EXTENSION_PREFIX, ExtensionConfig } from "./enums"
+import { isInEnum, logMod, obj } from "./util"
 
 export class Configuration {
-
   dlog: Logger
-  public config: Config = {}
-
-  public static readonly SETTINGS = {
-    GROUP_STEALING: 'controlGroupStealing',
-    NORMAL_MODE_ON_FILE_CHANGE: 'normalModeOnFileChange',
-  }
+  config: Config = {}
 
   constructor(dlog: Logger) {
     this.dlog = dlog
-    const config = vscode.workspace.getConfiguration('sc2')
+    const config = vscode.workspace.getConfiguration(EXTENSION_PREFIX)
+    dlog(`loaded configuration: ${obj(config)}`)
     for (const key of Object.keys(config)) {
-      if (typeof key === 'string' && Object.values(Configuration.SETTINGS).includes(key)) {
+      if (typeof key === "string" && isInEnum(ExtensionConfig, key)) {
+        dlog("config: setting ", config[key], " with: ", key)
         this.set(key, config[key])
       }
     }
     this.dlog(`Configuration: ${obj(this.config)}`)
   }
 
+  private handleConfigChange(
+    event: ConfigurationChangeEvent,
+    configSetting: ExtensionConfig,
+  ) {
+    if (event.affectsConfiguration(`${EXTENSION_PREFIX}.${configSetting}`)) {
+      const newVal = vscode.workspace
+        .getConfiguration("sc2")
+        .get<boolean>(configSetting)
+      this.set(configSetting, newVal)
+      this.dlog(
+        `${logMod(this.handleConfigChange.name)} (${configSetting})'s new value is: ${newVal}`,
+      )
+    }
+  }
+
   handleConfigChanges(event: ConfigurationChangeEvent) {
     // Control Group Stealing
-    if (event.affectsConfiguration(`sc2.${Configuration.SETTINGS.GROUP_STEALING}`)) {
-      const newVal = vscode.workspace.getConfiguration('sc2').get<boolean>(Configuration.SETTINGS.GROUP_STEALING)
-      this.set(Configuration.SETTINGS.GROUP_STEALING, newVal)
-      this.dlog(`${logMod(this.handleConfigChanges.name)} (${Configuration.SETTINGS.GROUP_STEALING}) changed to: ${newVal}`)
-    }
-    // Normal Mode On File Change 
-    if (event.affectsConfiguration(`sc2.${Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE}`)) {
-      const newVal = vscode.workspace.getConfiguration('sc2').get<boolean>(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE)
-      this.set(Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE, newVal)
-      this.dlog(`${logMod(this.handleConfigChanges.name)} (${Configuration.SETTINGS.NORMAL_MODE_ON_FILE_CHANGE}) changed to: ${newVal}`)
-    }
+    this.handleConfigChange(event, ExtensionConfig.GROUP_STEALING)
+    // Normal Mode On File Change
+    this.handleConfigChange(event, ExtensionConfig.NORMAL_MODE_ON_FILE_CHANGE)
+    // Prefer Tab Focus In Split Views
+    this.handleConfigChange(event, ExtensionConfig.PREFER_TAB_FOCUS_SPLIT)
   }
 
   get(key: string): ConfigVal | undefined {

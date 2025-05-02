@@ -1,16 +1,19 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode"
+import { ExtensionCommand } from "./enums"
 
 export class StatusBar implements vscode.Disposable {
-
-  public static readonly DEFAULT_LABEL_ON = '(CG)'
-  public static readonly DEFAULT_LABEL_OFF = '(CG OFF)'
-  public status: vscode.StatusBarItem
+  static readonly DEFAULT_LABEL_ON = "(CG)"
+  static readonly DEFAULT_LABEL_OFF = "(CG OFF)"
+  status: vscode.StatusBarItem
 
   constructor() {
-    this.status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, Number.MAX_VALUE)
+    this.status = vscode.window.createStatusBarItem(
+      vscode.StatusBarAlignment.Right,
+      Number.MAX_VALUE,
+    )
     this.status.text = StatusBar.DEFAULT_LABEL_ON
-    this.status.name = 'Control Groups Status'
-    this.status.command = 'sc2.toggle'
+    this.status.name = "Sc2 Control Groups Status"
+    this.status.command = `${ExtensionCommand.TOGGLE_EXTENSION}`
     this.status.show()
   }
 

@@ -198,6 +198,8 @@ Switches to Normal mode when opening any file, ignoring the vim mode that file w
           }
       ]
 ```
+
 ### todo
 
+- fix statusbar text sometimes disappearing when jumping files
 - add 'readonly group ids' to group configuration
