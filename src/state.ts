@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
 import { Mark } from "./mark"
 import { Logger, ExtensionState, MarkData } from "./types"
-import { isEmpty, isNullish, obj, logMod, compareObj } from "./util"
+import { isEmpty, isNullish, obj, logMod, compareObj, createMarkFromPos, isError } from "./util"
 import { StatusBar } from "./status"
 import { Configuration } from "./configuration"
 import { ExtensionConfig } from "./enums"
@@ -98,16 +98,39 @@ export class StateManager {
     const groups = this.state.groups
     const target = groups[id.toString()]
     if (isNullish(target) || isEmpty(target.marks)) return
+
+    // Handle current mark update before jumping
+    // Configuration: sc2.updateMarkBeforeJump
+    // ========================================================
+    // Creating a new mark '1' at line 31 and jumping to mark 'X' from a different position than mark '1' was initialized
+    // at will update the current mark '1' with the position the jump was called at, before jumping to destination mark.
+    if (this.config.get(ExtensionConfig.UPDATE_MARK_BEFORE_JUMP)) {
+      const activeGroupId = this.state.activeGroupId.toString()
+
+      // Handle single Mark same Control Group jump
+      if (!compareObj(target.marks, groups[activeGroupId].marks)) {
+        const markData = createMarkFromPos()
+        if (isError<MarkData>(markData)) {
+          throw new Error(
+            `${logMod(this.jumpToGroup.name)} ${markData.message}`,
+          )
+        }
+        // Replace the mark we're jumping from with new location
+        groups[activeGroupId].marks[groups[activeGroupId].lastMarkId] = new Mark(markData)
+      }
+    }
+
     this.state.activeGroupId = id
     const idx = isNullish(markId) ? groups[id.toString()].lastMarkId : markId
     this.dlog(
       `${logMod(this.jumpToGroup.name)} Args: ${[id, markId]} Jump idx: ${idx}`,
     )
-    const mark = groups[id].marks[idx]
+    const destMark = groups[id].marks[idx]
     groups[id].lastMarkId = idx
 
     // Handle Vscode split layout focus
     // Configuration: sc2.preferTabFocusInSplit
+    // ========================================================
     // E.g. If you have a vertical split in Vscode, mark 2 in left tab and mark 3 in the right one,
     // Jumping from mark 2 to mark 3 will switch focus from left tab to right instead of jumping to mark 3 in the left tab.
     const tabGroups = vscode.window.tabGroups.all
@@ -115,9 +138,9 @@ export class StateManager {
       tabGroups.length > 1 &&
       this.config.get(ExtensionConfig.PREFER_TAB_FOCUS_SPLIT)
     ) {
-      const targetGroup = Mark.getMarkTabGroup(mark.data)
+      const targetGroup = Mark.getMarkTabGroup(destMark.data)
       if (!isNullish(targetGroup)) {
-        return await Mark.jump(mark, {
+        return await Mark.jump(destMark, {
           viewColumn: targetGroup.viewColumn,
           preserveFocus: false,
           preview: false,
@@ -127,7 +150,7 @@ export class StateManager {
 
     // Normal scenario (only one tab group opened)
     // Jump to most-recently visited/added mark in group by default
-    await Mark.jump(mark)
+    await Mark.jump(destMark)
     const newState: ExtensionState = { ...this.state, groups }
     this.context.workspaceState
       .update(this.DISK_STATE_KEY, newState)
@@ -142,15 +165,19 @@ export class StateManager {
     )
     // Handle Control Group Stealing
     // Configuration: sc2.controlGroupStealing
+    // ========================================================
+    // Adding a Mark with pos=(x:y) to a new Control Group while already having a Mark with pos=(x:y) somewhere else
+    // will remove it from the previous group before adding to the new one.
     if (this.config.get(ExtensionConfig.GROUP_STEALING)) {
       const stealMark = this.getMarkToSteal(mark)
+      // TODO: early ret when src=dest mark
       if (Array.isArray(stealMark)) {
         const [groupId, markIdx] = stealMark
         this.dlog(
           `${logMod(this.addToGroup.name)} Stealing mark, groupId: ${groupId}, markIdx: ${markIdx}`,
         )
         groups[groupId] = {
-          lastMarkId: this.FIRST_MARK_ID, // reset to first after stealing from the group
+          lastMarkId: this.FIRST_MARK_ID, // Reset to first after stealing from the group
           marks: groups[groupId].marks.filter((_, i) => i !== markIdx),
         }
         if (groups[groupId].marks.length === 0) {

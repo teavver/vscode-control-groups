@@ -173,7 +173,7 @@
         "properties": {
           "sc2.controlGroupStealing": {
             "type": "boolean",
-            "markdownDescription": "Enable to remove units from previous control groups when assigning them to a new one",
+            "markdownDescription": "Assigning a Mark to a new Control Group removes it from the previous one",
             "default": false
           }
         }
@@ -183,7 +183,7 @@
         "properties": {
           "sc2.normalModeOnFileChange": {
             "type": "boolean",
-            "markdownDescription": "Switches to Normal mode when opening any file, ignoring the vim mode that file was left in",
+            "markdownDescription": "Switches to Normal mode when opening any file, ignoring the vim mode that file was left in (a bit buggy)",
             "default": false
           }
         }
@@ -193,8 +193,18 @@
         "properties": {
           "sc2.preferTabFocusInSplit": {
             "type": "boolean",
-            "markdownDescription": "Prefer switching tab focus instead of overriding current tab when jumping to marks in split views",
+            "markdownDescription": "If a destination Mark is in multiple Vscode Tabs, open it in a Tab group other than the current one",
             "default": true
+          }
+        }
+      },
+     {
+        "title": "SC2 Control Groups",
+        "properties": {
+          "sc2.updateMarkBeforeJump": {
+            "type": "boolean",
+            "markdownDescription": "Update current Mark location before jumping to another Control Group",
+            "default": false
           }
         }
       }

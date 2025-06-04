@@ -12,4 +12,5 @@ export enum ExtensionConfig {
   GROUP_STEALING = "controlGroupStealing",
   NORMAL_MODE_ON_FILE_CHANGE = "normalModeOnFileChange",
   PREFER_TAB_FOCUS_SPLIT = "preferTabFocusInSplit",
+  UPDATE_MARK_BEFORE_JUMP = "updateMarkBeforeJump",
 }

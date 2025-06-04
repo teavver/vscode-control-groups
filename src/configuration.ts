@@ -43,6 +43,8 @@ export class Configuration {
     this.handleConfigChange(event, ExtensionConfig.NORMAL_MODE_ON_FILE_CHANGE)
     // Prefer Tab Focus In Split Views
     this.handleConfigChange(event, ExtensionConfig.PREFER_TAB_FOCUS_SPLIT)
+    // Update Current Mark Before Jumping
+    this.handleConfigChange(event, ExtensionConfig.UPDATE_MARK_BEFORE_JUMP)
   }
 
   get(key: string): ConfigVal | undefined {

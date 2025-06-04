@@ -116,11 +116,19 @@ add this to your `settings.json` vscode file:
 
 `sc2.controlGroupStealing` | `boolean` | default = `false`
 
-Enable to remove units from previous control groups when assigning them to a new one
+Assigning a Mark to a new Control Group removes it from the previous one
 
 `sc2.normalModeOnFileChange` | `boolean` | default = `false`
 
-Switches to Normal mode when opening any file, ignoring the vim mode that file was left in
+Switches to Normal mode when opening any file, ignoring the vim mode that file was left in (a bit buggy)
+
+`sc2.preferTabFocusInSplit` | `boolean` | default = `true`
+
+If a destination Mark is in multiple Vscode Tabs, open it in a Tab group other than the current one
+
+`sc2.updateMarkBeforeJump` | `boolean` | default = `false`
+
+Update current Mark location before jumping to another Control Group
 
 ---
 
