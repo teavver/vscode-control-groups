@@ -6,7 +6,7 @@
     "name": "teavver"
   },
   "publisher": "teavver",
-  "version": "1.9.2",
+  "version": "1.10.0",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -198,7 +198,7 @@
           }
         }
       },
-     {
+      {
         "title": "SC2 Control Groups",
         "properties": {
           "sc2.updateMarkBeforeJump": {
