@@ -1,7 +1,15 @@
 import * as vscode from "vscode"
 import { Mark } from "./mark"
 import { Logger, ExtensionState, MarkData } from "./types"
-import { isEmpty, isNullish, obj, logMod, compareObj, createMarkFromPos, isError } from "./util"
+import {
+  isEmpty,
+  isNullish,
+  obj,
+  logMod,
+  compareObj,
+  createMarkFromPos,
+  isError,
+} from "./util"
 import { StatusBar } from "./status"
 import { Configuration } from "./configuration"
 import { ExtensionConfig } from "./enums"
@@ -105,18 +113,23 @@ export class StateManager {
     // Creating a new mark '1' at line 31 and jumping to mark 'X' from a different position than mark '1' was initialized
     // at will update the current mark '1' with the position the jump was called at, before jumping to destination mark.
     if (this.config.get(ExtensionConfig.UPDATE_MARK_BEFORE_JUMP)) {
-      const activeGroupId = this.state.activeGroupId.toString()
+      const activeGroup = groups[this.state.activeGroupId.toString()]
+      const currentMarkId = activeGroup.lastMarkId
+      const currentMark = activeGroup.marks[currentMarkId]
+      const destMark =
+        target.marks[isNullish(markId) ? target.lastMarkId : markId]
 
-      // Handle single Mark same Control Group jump
-      if (!compareObj(target.marks, groups[activeGroupId].marks)) {
+      // Only update current mark if jumping to a different file
+      if (currentMark.data.uri !== destMark.data.uri) {
         const markData = createMarkFromPos()
         if (isError<MarkData>(markData)) {
           throw new Error(
             `${logMod(this.jumpToGroup.name)} ${markData.message}`,
           )
         }
-        // Replace the mark we're jumping from with new location
-        groups[activeGroupId].marks[groups[activeGroupId].lastMarkId] = new Mark(markData)
+
+        // Replace current mark
+        activeGroup.marks[currentMarkId] = new Mark(markData)
       }
     }
 
@@ -166,7 +179,7 @@ export class StateManager {
     // Handle Control Group Stealing
     // Configuration: sc2.controlGroupStealing
     // ========================================================
-    // Adding a Mark with pos=(x:y) to a new Control Group while already having a Mark with pos=(x:y) somewhere else
+    // Adding a Mark with pos(X) to a new Control Group while already having a Mark with pos(X) somewhere else
     // will remove it from the previous group before adding to the new one.
     if (this.config.get(ExtensionConfig.GROUP_STEALING)) {
       const stealMark = this.getMarkToSteal(mark)

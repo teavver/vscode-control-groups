@@ -113,6 +113,7 @@ export function activate(context: vscode.ExtensionContext) {
     toggleExtensionCommand,
     resetGroupsCommand,
     vscode.window.onDidChangeActiveTextEditor(handleTextEditorChange),
+    vscode.window.onDidChangeVisibleTextEditors(updateStatusBar),
     vscode.workspace.onDidChangeTextDocument(updateStatusBar),
   )
 }

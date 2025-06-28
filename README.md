@@ -210,4 +210,3 @@ Update current Mark location before jumping to another Control Group
 ### todo
 
 - fix statusbar text sometimes disappearing when jumping files
-- add 'readonly group ids' to group configuration

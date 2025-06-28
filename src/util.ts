@@ -17,8 +17,10 @@ export const isError = <T>(val: T | Error): val is Error => val instanceof Error
 export const isNullish = (val: any): val is undefined | null =>
   val === undefined || val === null
 
-export const compareObj = (obj1: object | Array<any>, obj2: object | Array<any>) =>
-  JSON.stringify(obj1) === JSON.stringify(obj2)
+export const compareObj = (
+  obj1: object | Array<any>,
+  obj2: object | Array<any>,
+) => JSON.stringify(obj1) === JSON.stringify(obj2)
 
 export const createDebugLogger = (context: vscode.ExtensionContext): Logger => {
   const logger: Logger = (...args: any) => {
