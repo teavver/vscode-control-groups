@@ -15,7 +15,7 @@
     "url": "https://github.com/teavver/vscode-control-groups"
   },
   "activationEvents": [
-    "*"
+    "onStartupFinished"
   ],
   "extensionDependencies": [
     "vscodevim.vim"
