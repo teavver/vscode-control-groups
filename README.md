@@ -118,10 +118,6 @@ add this to your `settings.json` vscode file:
 
 Assigning a Mark to a new Control Group removes it from the previous one
 
-`sc2.normalModeOnFileChange` | `boolean` | default = `false`
-
-Switches to Normal mode when opening any file, ignoring the vim mode that file was left in (a bit buggy)
-
 `sc2.preferTabFocusInSplit` | `boolean` | default = `true`
 
 If a destination Mark is in multiple Vscode Tabs, open it in a Tab group other than the current one

@@ -39,8 +39,6 @@ export class Configuration {
   handleConfigChanges(event: ConfigurationChangeEvent) {
     // Control Group Stealing
     this.handleConfigChange(event, ExtensionConfig.GROUP_STEALING)
-    // Normal Mode On File Change
-    this.handleConfigChange(event, ExtensionConfig.NORMAL_MODE_ON_FILE_CHANGE)
     // Prefer Tab Focus In Split Views
     this.handleConfigChange(event, ExtensionConfig.PREFER_TAB_FOCUS_SPLIT)
     // Update Current Mark Before Jumping
