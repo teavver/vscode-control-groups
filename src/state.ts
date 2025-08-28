@@ -102,7 +102,7 @@ export class StateManager {
       .join(" ")}`
   }
 
-  async jumpToGroup(id: number, markId?: number) {
+  async jumpToGroup(id: number, markId?: number, internalJump: boolean = false) {
     const groups = this.state.groups
     const target = groups[id.toString()]
     if (isNullish(target) || isEmpty(target.marks)) return
@@ -112,24 +112,25 @@ export class StateManager {
     // ========================================================
     // Creating a new mark '1' at line 31 and jumping to mark 'X' from a different position than mark '1' was initialized
     // at will update the current mark '1' with the position the jump was called at, before jumping to destination mark.
-    if (this.config.get(ExtensionConfig.UPDATE_MARK_BEFORE_JUMP)) {
+    if (this.config.get(ExtensionConfig.UPDATE_MARK_BEFORE_JUMP) && !internalJump) {
       const activeGroup = groups[this.state.activeGroupId.toString()]
       const currentMarkId = activeGroup.lastMarkId
       const currentMark = activeGroup.marks[currentMarkId]
-      const destMark =
-        target.marks[isNullish(markId) ? target.lastMarkId : markId]
 
-      // Only update current mark if jumping to a different file
-      if (currentMark.data.uri !== destMark.data.uri) {
-        const markData = createMarkFromPos()
-        if (isError<MarkData>(markData)) {
-          throw new Error(
-            `${logMod(this.jumpToGroup.name)} ${markData.message}`,
-          )
+      const activeEditor = vscode.window.activeTextEditor
+      if (activeEditor) {
+        const currentFileUri = activeEditor.document.uri.toString()
+
+        if (currentMark.data.uri === currentFileUri) {
+          const markData = createMarkFromPos()
+          if (isError<MarkData>(markData)) {
+            throw new Error(
+              `${logMod(this.jumpToGroup.name)} ${markData.message}`,
+            )
+          }
+          // Replace current mark
+          activeGroup.marks[currentMarkId] = new Mark(markData)
         }
-
-        // Replace current mark
-        activeGroup.marks[currentMarkId] = new Mark(markData)
       }
     }
 
@@ -241,13 +242,13 @@ export class StateManager {
         ? target.marks.length - 1
         : this.FIRST_MARK_ID
       target.lastMarkId = fullCycleId
-      return await this.jumpToGroup(activeGroupId, fullCycleId)
+      return await this.jumpToGroup(activeGroupId, fullCycleId, true)
     }
     this.dlog(
       `${logMod(this.cycle.name)} OK (${target.lastMarkId} -> ${nextId})`,
     )
     target.lastMarkId = nextId
-    await this.jumpToGroup(activeGroupId, nextId)
+    await this.jumpToGroup(activeGroupId, nextId, true)
   }
 
   async resetGroups() {

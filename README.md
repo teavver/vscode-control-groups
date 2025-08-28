@@ -124,7 +124,7 @@ If a destination Mark is in multiple Vscode Tabs, open it in a Tab group other t
 
 `sc2.updateMarkBeforeJump` | `boolean` | default = `false`
 
-Update current Mark location before jumping to another Control Group
+Update current Mark location before jumping to another Control Group (File-scoped).
 
 ---
 

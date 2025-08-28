@@ -181,16 +181,6 @@
       {
         "title": "SC2 Control Groups",
         "properties": {
-          "sc2.normalModeOnFileChange": {
-            "type": "boolean",
-            "markdownDescription": "Switches to Normal mode when opening any file, ignoring the vim mode that file was left in (a bit buggy)",
-            "default": false
-          }
-        }
-      },
-      {
-        "title": "SC2 Control Groups",
-        "properties": {
           "sc2.preferTabFocusInSplit": {
             "type": "boolean",
             "markdownDescription": "If a destination Mark is in multiple Vscode Tabs, open it in a Tab group other than the current one",
