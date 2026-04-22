@@ -2,7 +2,7 @@ import * as vscode from "vscode"
 import { ConfigurationChangeEvent } from "vscode"
 import { Config, ConfigVal, Logger } from "./types"
 import { EXTENSION_PREFIX, ExtensionConfig } from "./enums"
-import { isInEnum, logMod, obj } from "./util"
+import { isInEnum, logMod } from "./util"
 
 export class Configuration {
   dlog: Logger
@@ -11,14 +11,14 @@ export class Configuration {
   constructor(dlog: Logger) {
     this.dlog = dlog
     const config = vscode.workspace.getConfiguration(EXTENSION_PREFIX)
-    dlog(`loaded configuration: ${obj(config)}`)
+    dlog(`loaded configuration:`, config)
     for (const key of Object.keys(config)) {
       if (typeof key === "string" && isInEnum(ExtensionConfig, key)) {
         dlog("config: setting ", config[key], " with: ", key)
         this.set(key, config[key])
       }
     }
-    this.dlog(`Configuration: ${obj(this.config)}`)
+    this.dlog(`Configuration:`, this.config)
   }
 
   private handleConfigChange(
