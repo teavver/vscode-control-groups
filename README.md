@@ -202,7 +202,3 @@ Update current Mark location before jumping to another Control Group (File-scope
           }
       ]
 ```
-
-### todo
-
-- fix statusbar text sometimes disappearing when jumping files
