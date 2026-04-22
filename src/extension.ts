@@ -105,5 +105,7 @@ export function activate(context: vscode.ExtensionContext) {
     resetGroupsCommand,
     vscode.window.onDidChangeVisibleTextEditors(updateStatusBar),
     vscode.workspace.onDidChangeTextDocument(updateStatusBar),
+    vscode.workspace.onDidRenameFiles((e) => sm.handleRename(e.files)),
+    vscode.workspace.onDidDeleteFiles((e) => sm.handleDelete(e.files)),
   )
 }

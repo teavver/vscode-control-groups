@@ -3,8 +3,6 @@ import { MarkData, Logger } from "./types"
 
 export const logMod = (name: string) => `[${name}]:`
 
-export const obj = (json: object) => JSON.stringify(json, null, 4)
-
 export const isInEnum = <T extends object>(
   _enum: T,
   val: unknown,

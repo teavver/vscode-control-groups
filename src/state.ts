@@ -1,18 +1,17 @@
 import * as vscode from "vscode"
-import { Mark } from "./mark"
-import { Logger, ExtensionState, MarkData } from "./types"
-import {
-  isEmpty,
-  isNullish,
-  obj,
-  logMod,
-  compareObj,
-  createMarkFromPos,
-  isError,
-} from "./util"
-import { StatusBar } from "./status"
 import { Configuration } from "./configuration"
 import { ExtensionConfig } from "./enums"
+import { Mark } from "./mark"
+import { StatusBar } from "./status"
+import { ExtensionState, Logger, MarkData } from "./types"
+import {
+  compareObj,
+  createMarkFromPos,
+  isEmpty,
+  isError,
+  isNullish,
+  logMod,
+} from "./util"
 
 export class StateManager {
   private readonly dlog: Logger
@@ -175,7 +174,7 @@ export class StateManager {
     const groups = this.state.groups
     const mark = new Mark(data)
     this.dlog(
-      `${logMod(this.addToGroup.name)} Args: ${[id, obj(data), createGroup]}`,
+      `${logMod(this.addToGroup.name)} Args:`, { id, data, createGroup },
     )
     // Handle Control Group Stealing
     // Configuration: sc2.controlGroupStealing
@@ -249,6 +248,71 @@ export class StateManager {
     )
     target.lastMarkId = nextId
     await this.jumpToGroup(activeGroupId, nextId, true)
+  }
+
+  handleRename(files: readonly { oldUri: vscode.Uri; newUri: vscode.Uri }[]) {
+    const groups = this.state.groups
+    let changed = false
+    for (const { oldUri, newUri } of files) {
+      const oldStr = oldUri.toString()
+      const newStr = newUri.toString()
+      const oldPrefix = oldStr + "/"
+      const newPrefix = newStr + "/"
+      for (const gId of Object.keys(groups)) {
+        for (const mark of groups[gId].marks) {
+          if (mark.data.uri === oldStr) {
+            mark.data.uri = newStr
+            changed = true
+          } else if (mark.data.uri.startsWith(oldPrefix)) {
+            mark.data.uri = newPrefix + mark.data.uri.slice(oldPrefix.length)
+            changed = true
+          }
+        }
+      }
+    }
+    if (!changed) return
+    this.dlog(`${logMod(this.handleRename.name)} updated mark uris`)
+    const newState: ExtensionState = { ...this.state, groups }
+    this.context.workspaceState
+      .update(this.DISK_STATE_KEY, newState)
+      .then(() => this.status.update(this.formatState()))
+  }
+
+  handleDelete(files: readonly vscode.Uri[]) {
+    const groups = this.state.groups
+    const deleted = files.map((u) => u.toString())
+    const isDeleted = (uri: string) =>
+      deleted.some(
+        (d) => uri === d || uri.startsWith(d.endsWith("/") ? d : d + "/"),
+      )
+    const orphans: { gId: string; mark: Mark }[] = []
+    for (const gId of Object.keys(groups)) {
+      const kept: Mark[] = []
+      for (const mark of groups[gId].marks) {
+        if (isDeleted(mark.data.uri)) orphans.push({ gId, mark })
+        else kept.push(mark)
+      }
+      if (kept.length === groups[gId].marks.length) continue
+      // If all marks in a group belonged to deleted files the group becomes empty, so drop it.
+      // If it was the active group, reset activeGroupId so the status bar does not point at a nonexisting group.
+      if (kept.length === 0) {
+        delete groups[gId]
+        if (this.state.activeGroupId.toString() === gId) {
+          this.state.activeGroupId = -1
+        }
+        continue
+      }
+      groups[gId] = { lastMarkId: this.FIRST_MARK_ID, marks: kept }
+    }
+    if (orphans.length === 0) return
+    this.dlog(
+      `${logMod(this.handleDelete.name)} deleted ${orphans.length} orphan mark(s):`,
+      orphans.map(({ gId, mark }) => ({ gId, ...mark.data })),
+    )
+    const newState: ExtensionState = { ...this.state, groups }
+    this.context.workspaceState
+      .update(this.DISK_STATE_KEY, newState)
+      .then(() => this.status.update(this.formatState()))
   }
 
   async resetGroups() {
